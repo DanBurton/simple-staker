@@ -81,13 +81,13 @@ console.log(`ctc deployed`);
 await pReadyForStakers;
 console.log(`ready for stakers`);
 
-const tryStake = async (i, amt) => {
-  const {stake} = ctcStakers[i].apis.Staker;
+const tryFn = async (fname, verbed, i, ...args) => {
+  const f = ctcStakers[i].apis.Staker[fname];
   let tries = 1;
   while (tries < 1000) {
     try {
-      await stake(amt);
-      console.log(`Staker # ${i} staked ${amt} after trying ${tries} time(s)`);
+      await f(...args);
+      console.log(`Staker # ${i} ${verbed} ${args} after trying ${tries} time(s)`);
       break;
     } catch (e) {
       void(e);
@@ -95,10 +95,34 @@ const tryStake = async (i, amt) => {
     }
   }
 }
+const tryStake = async (i, amt) => await tryFn('stake', 'staked', i, amt);
+const tryHarvest = async (i) => await tryFn('harvest', 'harvested', i);
+const tryWithdraw = async (i, amt) => await tryFn('withdraw', 'withdrew', i, amt);
 
-for (let i = 0; i < nStakers; i++) {
-  tryStake(i, 10);
+const stakes = [];
+const stakeAmt = 10;
+for (let i = 0; i < nStakers - 1; i++) {
+  stakes.push(tryStake(i, stakeAmt));
 }
+await Promise.all(stakes);
+console.log(`n - 1 staked`);
+
+await balances();
+
+const harvests = [];
+for (let i = 0; i < nStakers - 1; i++) {
+  harvests.push(tryHarvest(i));
+}
+await Promise.all(harvests);
+console.log(`n - 1 harvested`);
+await balances();
+
+await tryWithdraw(0, 5);
+await balances();
+
+await tryStake(0, 5);
+await tryStake(nStakers - 1, stakeAmt);
+console.log(`all staked`);
 
 await pDeployer;
 await balances();
