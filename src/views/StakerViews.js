@@ -47,4 +47,36 @@ exports.Attaching = class extends React.Component {
   }
 }
 
+exports.ApplicationInfo = class extends React.Component {
+  render() {
+    return (
+      <main>
+          <h1>Tokens!</h1>
+          <p>tokens placeholder...</p>
+
+          <h1>Current amount staked</h1>
+          <p>123 placeholder</p>
+
+          <h1>Rewards per block</h1>
+          <p>You earned</p>
+          <p>numRewards</p>
+          <p>on this block!</p>
+
+          <h1>This reward period ends on</h1>
+          <p>reward period end date placeholder</p>
+
+          <button onClick={() => console.log('staking!')}>
+            Stake!
+          </button>
+          <button onClick={() => console.log('HARVEST!')}>
+            HARVEST!
+          </button>
+          <button onClick={() => console.log('Withdraw!')}>
+            Withdraw
+          </button>
+      </main>
+    );
+  }
+}
+
 export default exports;

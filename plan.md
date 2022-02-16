@@ -21,11 +21,11 @@
 * Buttons
   * Deploy (-> Deployed)
 
-### [x] Deployed
+~### Deployed~
 
-* info:
-  * the application ID
-* maybe store app id in browser storage for later retrieval on another web view?
+~* info:~
+~  * the application ID~
+~* maybe store app id in browser storage for later retrieval on another web view?~
 
 ## Staker web views
 
@@ -38,17 +38,17 @@
 
 ### ApplicationInfo
 
-* info: (from a Reach view)
-  * which tokens
-  * how much is currently staked
-  * rewards per block
-  * when the reward period is over
+~* info: (from a Reach view)~
+~  * which tokens~
+~  * how much is currently staked~
+~  * rewards per block~
+~  * when the reward period is over~
 * maybe store in browser storage for later retrieval?
 
-* Buttons
-  * Stake (-> Stake)
-  * Harvest (-> Harvested)
-  * Withdraw (-> Withdraw)
+* ~Buttons~
+  * ~Stake (-> Stake)~
+  * ~Harvest (-> Harvested)~
+  * ~Withdraw (-> Withdraw)~
 
 ### Stake
 
