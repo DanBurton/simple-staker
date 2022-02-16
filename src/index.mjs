@@ -5,6 +5,8 @@ import * as reachsdk from '@reach-sh/stdlib';
 import * as backend from './build/index.main.mjs';
 const reach = reachsdk.loadStdlib(process.env);
 
+(async () => {
+
 console.log(`creating accounts`);
 
 const bal = reach.parseCurrency(100);
@@ -102,3 +104,5 @@ await pDeployer;
 await balances();
 
 console.log(`done`);
+
+})();
