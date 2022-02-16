@@ -59,7 +59,6 @@
   * Amount
 * Buttons
   * Stake (-> Staked)
-* enter amount to withdraw, click button to withdraw
 
 ### Staked
 
@@ -82,7 +81,29 @@
 * Info
   * application ID
   * what is the reward token
+  * how much you harvested
 * Buttons
+  * Back (-> ApplicationInfo)
+
+### Withdraw
+
+* info
+  * application ID
+  * (would be nice to show them how much they can withdraw but discovering it is tricky)
+  * what is the stake token
+* fields
+  * amount
+* buttons
+  * Withdraw (-> Withdrew)
+
+### Withdrew
+
+* info
+  * application ID
+  * what is the stake token
+  * how much of it you withdrew
+  * maybe a tx id or something
+* buttons
   * Back (-> ApplicationInfo)
 
 ## Bonus? Observer views

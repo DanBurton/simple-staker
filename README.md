@@ -16,6 +16,8 @@ Deploys to GH pages
 Recompiles the reach contract.
 Can be useful if you have the react dev server already running.
 
-## `REACH_CONNECTOR_MODE=ALGO reach run test`
+## `npm run test`
 
 Runs the cli test against local ALGO devnet.
+(This is a bit deceptive, because it doesn't actually use your local npm;
+instead it uses reach run.)

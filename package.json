@@ -19,7 +19,7 @@
     "recompile": "(cd src && ../reach compile)",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "test": "react-scripts test",
+    "test": "REACH_CONNECTOR_MODE=ALGO ./reach run test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
