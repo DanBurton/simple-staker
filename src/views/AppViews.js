@@ -8,7 +8,7 @@ exports.Wrapper = class extends React.Component {
     return (
       <div className="App">
         <header className="App-header" id="root">
-          <h1>Rock, Paper, Scissors</h1>
+          <h1>Simple Staker</h1>
           {content}
         </header>
       </div>
@@ -27,33 +27,7 @@ exports.ConnectAccount = class extends React.Component {
   }
 }
 
-exports.FundAccount = class extends React.Component {
-  render() {
-    const {bal, standardUnit, defaultFundAmt, parent} = this.props;
-    const amt = (this.state || {}).amt || defaultFundAmt;
-    return (
-      <div>
-        <h2>Fund account</h2>
-        <br />
-        Balance: {bal} {standardUnit}
-        <hr />
-        Would you like to fund your account with additional {standardUnit}?
-        <br />
-        (This only works on certain devnets)
-        <br />
-        <input
-          type='number'
-          placeholder={defaultFundAmt}
-          onChange={(e) => this.setState({amt: e.currentTarget.value})}
-        />
-        <button onClick={() => parent.fundAccount(amt)}>Fund Account</button>
-        <button onClick={() => parent.skipFundAccount()}>Skip</button>
-      </div>
-    );
-  }
-}
-
-exports.DeployerOrAttacher = class extends React.Component {
+exports.RoleSelect = class extends React.Component {
   render() {
     const {parent} = this.props;
     return (
@@ -64,13 +38,13 @@ exports.DeployerOrAttacher = class extends React.Component {
           <button
             onClick={() => parent.selectDeployer()}
           >Deployer</button>
-          <br /> Set the wager, deploy the contract.
+          <br /> Incentivise others to stake by deploying and funding a contract with rewards.
         </p>
         <p>
           <button
-            onClick={() => parent.selectAttacher()}
-          >Attacher</button>
-          <br /> Attach to the Deployer's contract.
+            onClick={() => parent.selectStaker()}
+          >Staker</button>
+          <br /> Stake in a deployed contract to receive its rewards.
         </p>
       </div>
     );
