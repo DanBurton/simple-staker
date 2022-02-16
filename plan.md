@@ -21,7 +21,7 @@
 * Buttons
   * Deploy (-> Deployed)
 
-### Deployed
+### [x] Deployed
 
 * info:
   * the application ID

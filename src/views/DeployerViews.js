@@ -43,4 +43,22 @@ exports.Deploying = class extends React.Component {
   }
 }
 
+exports.Deployed = class extends React.Component {
+  getApplicationId() {
+    const applicationID = 'placeHolderApplicationID';
+    localStorage.setItem('Application ID!', applicationID);
+    return applicationID;
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <main>Deployed!</main>
+        <p>The application ID is</p>
+        <p>${this.getApplicationId()}</p>
+      </React.Fragment>
+    );
+  }
+}
+
 export default exports;
