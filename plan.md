@@ -1,16 +1,16 @@
 # plan
 
-## App web views
+~## App web views~
 
 ~### ConnectAccount~
 
 ~* tell the user to accept the MyAlgoWallet pop up~
 
-### RoleSelect
+~### RoleSelect~
 
-* Buttons:
-  * Deployer (-> Deploy)
-  * Staker (-> ApplicationSelect)
+~* Buttons:~
+  ~* Deployer (-> Deploy)~
+  ~* Staker (-> ApplicationSelect)~
 
 ~## Deployer web views~
 
