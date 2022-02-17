@@ -41,6 +41,11 @@ class Deployer extends React.Component {
     super(props);
     this.state = {view: 'SetOpts'}; // XXX create view
   }
+
+  deployAfterSettingOptions() {
+    this.setState( { view: 'Deployed' } );
+  }
+
   // TODO
   // async deploy() {
   //   const ctc = this.props.acc.contract(backend);

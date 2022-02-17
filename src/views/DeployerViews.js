@@ -16,8 +16,16 @@ exports.Wrapper = class extends React.Component {
 
 exports.SetOpts = class extends React.Component {
   render() {
+    const { parent, opts } = this.props;
+    console.info('parent!', parent);
+    console.info('opts!', opts);
+
     return (
-      <div>TODO</div>
+      <button onClick={
+        () => parent.deployAfterSettingOptions()
+      }>
+        Deploy!
+      </button>
     );
   }
 }

@@ -12,14 +12,14 @@
   * Deployer (-> Deploy)
   * Staker (-> ApplicationSelect)
 
-## Deployer web views
+~## Deployer web views~
 
-### Deploy
+~### Deploy~
 
-* Fields
-  * opts
-* Buttons
-  * Deploy (-> Deployed)
+~* Fields~
+  ~* opts~
+~* Buttons~
+  ~* Deploy (-> Deployed)~
 
 ~### Deployed~
 
