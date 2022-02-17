@@ -26,7 +26,7 @@ exports.ConnectAccount = class extends React.Component {
         Please click the button to connect your account.
         <br />
         <br />
-        <button onClick={
+        <button className='MyAlgoWalletButton' onClick={
           () => parent.openWalletPopUp()
         }>MyAlgoConnect</button>
       </main>

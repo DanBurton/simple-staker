@@ -1,3 +1,7 @@
+:root {
+  --StakerAttach1: #FFEB37;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,6 +17,7 @@ code {
 }
 .App {
   background: url(img/Green_background.png);
+
   /* Green_background 1 */
   /* position: absolute; */
   height: 100%;
@@ -39,6 +44,20 @@ code {
 
 .App-link {
   color: #61dafb;
+}
+
+.MyAlgoWalletButton {
+  background-color: aquamarine;
+  color: black;
+}
+
+button {
+  border-radius: 16px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  padding: 6px 48px;
 }
 
 input[type=number] {
