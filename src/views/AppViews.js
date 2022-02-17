@@ -18,12 +18,17 @@ exports.Wrapper = class extends React.Component {
 
 exports.ConnectAccount = class extends React.Component {
   render() {
+    const { parent } = this.props;
+    console.info('props!', this.props);
+    console.info('parent!', parent);
     return (
       <main>
-        Please wait while we connect to your account.
-        If this takes more than a few seconds,
-        there may be something wrong.
-        Please allow the MyAlgoWallet pop-up window.
+        Please click the button to connect your account.
+        <br />
+        <br />
+        <button onClick={
+          () => parent.openWalletPopUp()
+        }>MyAlgoConnect</button>
       </main>
     )
   }

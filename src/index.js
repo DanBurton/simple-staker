@@ -11,11 +11,6 @@ const reach = loadStdlib({
   REACH_CONNECTOR_MODE: 'ALGO',
   // REACH_DEBUG: 'yes',
 });
-// TODO: let user choose with a button
-reach.setWalletFallback(reach.walletFallback({
-  MyAlgoConnect,
-  providerEnv: 'TestNet',
-}));
 
 const {standardUnit} = reach;
 const defaults = {standardUnit};
@@ -25,12 +20,19 @@ class App extends React.Component {
     super(props);
     this.state = {view: 'ConnectAccount', ...defaults};
   }
-  async componentDidMount() {
+
+  async openWalletPopUp() {
+    reach.setWalletFallback(reach.walletFallback({
+      MyAlgoConnect,
+      providerEnv: 'TestNet',
+    }));
+
     const acc = await reach.getDefaultAccount();
     const balAtomic = await reach.balanceOf(acc);
     const bal = reach.formatCurrency(balAtomic, 4);
     this.setState({acc, bal, view: 'RoleSelect'}); // XXX create view
   }
+
   selectDeployer() { this.setState({view: 'Wrapper', ContentView: Deployer}); }
   selectStaker() { this.setState({view: 'Wrapper', ContentView: Staker}); }
   render() { return renderView(this, AppViews); }

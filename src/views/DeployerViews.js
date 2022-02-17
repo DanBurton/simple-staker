@@ -18,7 +18,7 @@ exports.SetOpts = class extends React.Component {
   render() {
     const { parent, opts } = this.props;
     console.info('parent!', parent);
-    console.info('opts!', opts);
+    console.info('SetOpts\' opts!', opts);
 
     return (
       <button onClick={
