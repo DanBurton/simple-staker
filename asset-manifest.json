@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/simple-staker/static/css/main.621dd781.css",
-    "main.js": "/simple-staker/static/js/main.13cc8a2b.js",
+    "main.js": "/simple-staker/static/js/main.b42ae647.js",
     "index.html": "/simple-staker/index.html",
     "main.621dd781.css.map": "/simple-staker/static/css/main.621dd781.css.map",
-    "main.13cc8a2b.js.map": "/simple-staker/static/js/main.13cc8a2b.js.map"
+    "main.b42ae647.js.map": "/simple-staker/static/js/main.b42ae647.js.map"
   },
   "entrypoints": [
     "static/css/main.621dd781.css",
-    "static/js/main.13cc8a2b.js"
+    "static/js/main.b42ae647.js"
   ]
 }
