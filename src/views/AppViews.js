@@ -19,10 +19,12 @@ exports.Wrapper = class extends React.Component {
 exports.ConnectAccount = class extends React.Component {
   render() {
     return (
-      <div>
+      <main>
         Please wait while we connect to your account.
-        If this takes more than a few seconds, there may be something wrong.
-      </div>
+        If this takes more than a few seconds,
+        there may be something wrong.
+        Please allow the MyAlgoWallet pop-up window.
+      </main>
     )
   }
 }

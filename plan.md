@@ -2,9 +2,9 @@
 
 ## App web views
 
-### ConnectAccount
+~### ConnectAccount~
 
-* tell the user to accept the MyAlgoWallet pop up
+~* tell the user to accept the MyAlgoWallet pop up~
 
 ### RoleSelect
 
