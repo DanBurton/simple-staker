@@ -100,7 +100,10 @@ const tryFn = async (lab, f, ...args) => {
 }
 const tryApi = async (fname, verbed, i, ...args) =>
   await tryFn(`Staker #${i} ${verbed}`, ctcStakers[i].apis.Staker[fname], ...args);
-const tryStake = async (i, amt) => await tryApi('stake', 'staked', i, amt);
+const tryStake = async (i, amt) => {
+  await tryApi('stake', 'staked', i, amt);
+  await tryViewFor('staked', i);
+};
 // const tryHarvest = async (i) => await tryApi('harvest', 'harvested', i);
 const tryHarvest = async (i) => console.log(`TODO: fix harvest`); // XXX
 const tryWithdraw = async (i, amt) => await tryApi('withdraw', 'withdrew', i, amt);
