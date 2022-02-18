@@ -6,7 +6,7 @@ exports.Wrapper = class extends React.Component {
   render() {
     const {content} = this.props;
     return (
-      <div className="Staker">
+      <div className="MainContent">
         <h2>Staker</h2>
         {content}
       </div>
@@ -21,14 +21,20 @@ exports.Attach = class extends React.Component {
     const thing = 'Application ID'; // XXX
     return (
       <div>
-        Please paste the {thing} to attach to:
+        Please paste the {thing} to attach to.
+        One possible source of this is from deploying the contract.
         <br />
-        <input spellCheck="false"
+        <br />
+        <input
           className='ContractInfo'
           onChange={(e) => this.setState({ctcInfoStr: e.currentTarget.value})}
+          spellCheck="false"
+          type='text'
         />
         <br />
+        <br />
         <button
+          className='Staker SmallButton'
           disabled={!ctcInfoStr}
           onClick={() => parent.attach(ctcInfoStr)}
         >Attach</button>

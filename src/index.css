@@ -16,6 +16,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 .App {
   background: url(img/Green_background.png);
 
@@ -127,9 +128,11 @@ textarea {
 }
 
 .ContractInfo {
+  border-radius: 16px;
+  border: 1px black solid;
   font-size: calc(10px + 1vmin);
   text-align: left;
-  width: 90vw;
   overflow-x: scroll;
   white-space: pre;
+  width: 50%;
 }

@@ -21,6 +21,8 @@ exports.Wrapper = class extends React.Component {
 exports.ConnectAccount = class extends React.Component {
   render() {
     const { parent } = this.props;
+    const ctcInfoStr = false;
+    const thing = 'applicationID';
     console.info('props!', this.props);
     console.info('parent!', parent);
     return (
