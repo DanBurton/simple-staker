@@ -20,6 +20,10 @@ const Opts = Struct([
 const min = (x, y) => x <= y ? x : y;
 
 export const main = Reach.App(() => {
+  setOptions({untrustworthyMaps: false});
+  // Users deleting their own local state would only hurt themselves.
+  // They would lose access to rewards and stake that should be rightfully theirs.
+
   const Deployer = Participant('Deployer', {
     opts: Opts,
     readyForStakers: Fun([], Null),
@@ -53,28 +57,43 @@ export const main = Reach.App(() => {
 
   const startRewards = rewardsPerBlock * duration;
   Deployer.pay([[startRewards, rewardToken]]);
+  const start = lastConsensusTime();
+  const end = start + duration;
+  const totAvailableRewardsAt = (when) => rewardsPerBlock * min(duration, when - start);
+
+  const Stakes = new Map(UInt);      // amt staked by addr
+  const RewardsPaid = new Map(UInt); // amt rewards already "paid" to addr
+  // Staking "late" is treated as though "you already got" rewards up until the moment you staked
+
+  const lookupStaked = (addr) => fromSome(Stakes[addr], 0);
+  const lookupRewardsPaid = (addr) => fromSome(RewardsPaid[addr], 0);
 
   Deployer.interact.readyForStakers();
-
   const [totalStaked, remainingRewards] = parallelReduce([0, startRewards])
     .define(() => {
-      const lookupStaked = (addr) => totalStaked; // XXX
-      const lookupRewardsAt = (when, addr) => min(10, remainingRewards); // XXX
-      const lookupRewards = (addr) => lookupRewardsAt(lastConsensusTime(), addr);
+      const lookupRewardsAt = (addr, when) => {
+        const youStaked = lookupStaked(addr);
+        const youAlreadyGot = lookupRewardsPaid(addr);
+        assert(youStaked <= totalStaked);
+        return ((totAvailableRewardsAt(when) * youStaked) / totalStaked) - youAlreadyGot;
+      };
+      const lookupRewards = (addr) => lookupRewardsAt(addr, lastConsensusTime());
+      const totAvailableRewards = totAvailableRewardsAt(lastConsensusTime());
       V.totalStaked.set(totalStaked);
       V.remainingRewards.set(remainingRewards);
       V.staked.set(lookupStaked);
-      V.rewardsAvailableAt.set(lookupRewardsAt)
+      V.rewardsAvailableAt.set(lookupRewardsAt);
     })
     .invariant(     balance() == 0
       &&  balance(stakeToken) == totalStaked
+      &&         Stakes.sum() == totalStaked
       && balance(rewardToken) == remainingRewards
-      // TODO: assert that sum(staked) == totakStaked
-      // maybe more assertions too
+      &&         startRewards >= remainingRewards
+      // TODO: assert that sum of rewards available by deadline <= remainingRewards
+      // Not sure about rounding errors
       )
     .paySpec([stakeToken])
-    // XXX disallow going past the deadline
-    .while(totalStaked > 0 || remainingRewards > 0)
+    .while(totalStaked != 0 || lastConsensusTime() <= end)
     .api(Staker.refresh,
       // XXX make it possible to declare rewards up to a given time
       // It seems like this does nothing.
@@ -89,34 +108,51 @@ export const main = Reach.App(() => {
       ((amt, k) => {
         const newEveryoneStaked = totalStaked + amt;
         const newUserStaked = lookupStaked(this) + amt;
+        Stakes[this] = newUserStaked;
+        const currentPaid = lookupRewardsPaid(this);
+        const morePaid = totAvailableRewards * amt / newEveryoneStaked;
+        RewardsPaid[this] = currentPaid + morePaid;
         k(StakeUpdate.fromObject({newUserStaked, newEveryoneStaked}));
-        // XXX record that this has staked amt
         return [newEveryoneStaked, remainingRewards];
       }))
     .api(Staker.withdraw,
-      ((amt) => assume(amt <= totalStaked)),
+      ((amt) => assume(amt <= lookupStaked(this))),
       ((_) => [0, [0, stakeToken]]),
       ((amt, k) => {
-        // XXX require this has staked >= amt
         const oldUserStaked = lookupStaked(this);
         assert(oldUserStaked <= totalStaked);
         require(amt <= oldUserStaked);
         transfer([[amt, stakeToken]]).to(this);
         const newEveryoneStaked = totalStaked - amt;
         const newUserStaked = oldUserStaked - amt;
+        Stakes[this] = newUserStaked;
+        const currentPaid = lookupRewardsPaid(this);
+        const lessPaid = totAvailableRewards * amt / newEveryoneStaked;
+        // TODO: assert things about currentPaid/lessPaid
+        RewardsPaid[this] = currentPaid - lessPaid;
         assert(newUserStaked <= newEveryoneStaked);
         k(StakeUpdate.fromObject({newUserStaked, newEveryoneStaked}));
         return [newEveryoneStaked, remainingRewards];
       }))
     .api(Staker.harvest,
+      (() => {
+        const amt = lookupRewards(this);
+        assume(amt >= 0); // meaningless?
+        assume(amt <= remainingRewards);
+      }),
       (() => [0, [0, stakeToken]]),
       ((k) => {
         const amt = lookupRewards(this);
-        assert(amt <= remainingRewards);
+        // XXX This should be an assert instead of assume/require
+        require(amt <= remainingRewards);
         transfer([[amt, rewardToken]]).to(this);
         const totalRemaining = remainingRewards - amt;
+        RewardsPaid[this] = lookupRewardsPaid(this) + amt;
         k(RewardsUpdate.fromObject({userReceived: amt, totalRemaining}));
         return [totalStaked, totalRemaining];
       }))
+  commit();
+  Deployer.publish();
+  transfer([[remainingRewards, rewardToken]]).to(Deployer);
   commit();
 });
