@@ -68,9 +68,8 @@ const pDeployer = ctcDeployer.p.Deployer({
   opts: {
     rewardToken: RWD.id,
     stakeToken: STK.id,
-    rewardsPerBlock: 1,
+    rewardsPerBlock: 10,
     duration: 10,
-    goal: 100,
   },
   readyForStakers: () => resolveReadyForStakers(),
 });
@@ -81,23 +80,66 @@ console.log(`ctc deployed`);
 await pReadyForStakers;
 console.log(`ready for stakers`);
 
-const tryFn = async (fname, verbed, i, ...args) => {
-  const f = ctcStakers[i].apis.Staker[fname];
+const tryFn = async (lab, f, ...args) => {
+  const maxTries = 1000;
   let tries = 1;
-  while (tries < 1000) {
+  while (tries < maxTries) {
     try {
-      await f(...args);
-      console.log(`Staker # ${i} ${verbed} ${args} after trying ${tries} time(s)`);
-      break;
+      const r = await f(...args);
+      console.log(`${lab} ${JSON.stringify(pretty(args))} after trying ${tries} time(s)`);
+      return r;
     } catch (e) {
       void(e);
       tries++;
     }
   }
+  throw Error(`Filed fo ${fname}`);
 }
-const tryStake = async (i, amt) => await tryFn('stake', 'staked', i, amt);
-const tryHarvest = async (i) => await tryFn('harvest', 'harvested', i);
-const tryWithdraw = async (i, amt) => await tryFn('withdraw', 'withdrew', i, amt);
+const tryApi = async (fname, verbed, i, ...args) =>
+  await tryFn(`Staker #${i} ${verbed}`, ctcStakers[i].apis.Staker[fname], ...args);
+const tryStake = async (i, amt) => await tryApi('stake', 'staked', i, amt);
+const tryHarvest = async (i) => await tryApi('harvest', 'harvested', i);
+const tryWithdraw = async (i, amt) => await tryApi('withdraw', 'withdrew', i, amt);
+
+function pretty(r) {
+  if (typeof r === 'string') {
+    return r;
+  } else if (r._isBigNumber) {
+    return r.toString();
+  } else if (r.networkAccount && r.networkAccount.addr) {
+    return r.networkAccount.addr.slice(0, 8);
+  } else if (Array.isArray(r) && r[0] == 'Some') {
+    return pretty(r[1]);
+  } else if (Array.isArray(r)) {
+    return r.map((x) => pretty(x));
+  } else if (Object.keys(r).length > 0) {
+    const o = {};
+    for (const k in r) { o[k] = pretty(r[k]); }
+    return o;
+  } else if (r.toString) {
+    return r.toString();
+  } else {
+    return r
+  }
+}
+
+const tryView = async (fname, ...args) => {
+  const r = await tryFn(`Someone saw ${fname}`, ctcStakers[0].views[fname], ...args);
+  console.log(pretty(r));
+}
+const tryViewFor = async (fname, i, ...args) => {
+  const acc = accStakers[i];
+  const r = await tryFn(`Staker #${i} saw ${fname}`, ctcStakers[i].views[fname], acc, ...args);
+  console.log(pretty(r));
+}
+
+await tryView('opts');
+await tryView('totalStaked');
+await tryView('remainingRewards');
+
+const now = await reach.getNetworkTime();
+await tryViewFor('staked', 0);
+await tryViewFor('rewardsAvailableAt', 0, now);
 
 const stakes = [];
 const stakeAmt = 10;
@@ -106,7 +148,6 @@ for (let i = 0; i < nStakers - 1; i++) {
 }
 await Promise.all(stakes);
 console.log(`n - 1 staked`);
-
 await balances();
 
 const harvests = [];
@@ -122,7 +163,13 @@ await balances();
 
 await tryStake(0, 5);
 await tryStake(nStakers - 1, stakeAmt);
+await tryHarvest(9);
 console.log(`all staked`);
+await balances();
+
+for (let i = 0; i < nStakers; i++) {
+  tryWithdraw(i, 10);
+}
 
 await pDeployer;
 await balances();
