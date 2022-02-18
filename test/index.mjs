@@ -103,11 +103,11 @@ const tryApi = async (fname, verbed, i, ...args) =>
 const tryStake = async (i, amt) => await tryApi('stake', 'staked', i, amt);
 // const tryHarvest = async (i) => await tryApi('harvest', 'harvested', i);
 const tryHarvest = async (i) => console.log(`TODO: fix harvest`); // XXX
-// const tryWithdraw = async (i, amt) => await tryApi('withdraw', 'withdrew', i, amt);
-const tryWithdraw = async (i, amt) => {
-  if (i == 0 && amt == 6) { throw Error('this is supposed to fail'); };
-  console.log(`TODO: fix withdraw`); // XXX
-};
+const tryWithdraw = async (i, amt) => await tryApi('withdraw', 'withdrew', i, amt);
+// const tryWithdraw = async (i, amt) => {
+//   if (i == 0 && amt == 6) { throw Error('this is supposed to fail'); };
+//   console.log(`TODO: fix withdraw`); // XXX
+// };
 
 function pretty(r) {
   if (!r) {
@@ -183,8 +183,7 @@ if (!failed) {
   process.exit(1);
 }
 
-// XXX uncomment
-// await tryStake(0, 5);
+await tryStake(0, 5);
 const lastStaker = nStakers - 1;
 await tryStake(lastStaker, stakeAmt);
 await tryHarvest(lastStaker);
