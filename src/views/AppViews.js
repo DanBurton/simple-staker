@@ -9,7 +9,9 @@ exports.Wrapper = class extends React.Component {
       <div className="App">
         <header className="App-header" id="root">
           <h1>Simple Staker</h1>
-          {content}
+          <main className='MainContentContainer'>
+            {content}
+          </main>
         </header>
       </div>
     );
@@ -22,14 +24,16 @@ exports.ConnectAccount = class extends React.Component {
     console.info('props!', this.props);
     console.info('parent!', parent);
     return (
-      <main>
-        Please click the button to connect your account.
+      <>
+        <p className='MainContent'>
+          Please click the button to connect your account.
+        </p>
         <br />
         <br />
         <button className='MyAlgoWalletButton' onClick={
           () => parent.openWalletPopUp()
         }>MyAlgoConnect</button>
-      </main>
+      </>
     )
   }
 }
@@ -39,20 +43,30 @@ exports.RoleSelect = class extends React.Component {
     const {parent} = this.props;
     return (
       <div>
-        Please select a role:
+        <p className='MainContent'>
+          Please select a role:
+        </p>
         <br />
-        <p>
-          <button
+        <span className='LargeButtonContainer'>
+          <button className='LargeButton Deployer'
             onClick={() => parent.selectDeployer()}
-          >Deployer</button>
-          <br /> Incentivise others to stake by deploying and funding a contract with rewards.
-        </p>
-        <p>
-          <button
+          >
+            <h1>Deployer</h1>
+
+            <p>
+              Incentivise others to stake by deploying and funding a contract with rewards.
+            </p>
+          </button>
+          <button className='LargeButton Staker'
             onClick={() => parent.selectStaker()}
-          >Staker</button>
-          <br /> Stake in a deployed contract to receive its rewards.
-        </p>
+          >
+            <h1>Staker</h1>
+
+            <p>
+            Stake in a deployed contract to receive its rewards.
+            </p>
+          </button>
+        </span>
       </div>
     );
   }
