@@ -37,12 +37,17 @@ const btok = async (acc, tok) => {
 
 const balances = async () => {
   const t = [];
+  let totRwd = 0;
+  let totStk = 0;
   for (const acc of [accDeployer, ...accStakers]) {
     const addr = (reach.formatAddress(acc)).slice(0, 8);
-    const rwd = (await btok(acc, RWD)).toString();
-    const stk = (await btok(acc, STK)).toString();
+    const rwd = (await btok(acc, RWD)).toNumber();
+    const stk = (await btok(acc, STK)).toNumber();
+    totRwd = totRwd + rwd;
+    totStk = totStk + stk;
     t.push({addr, rwd, stk});
   }
+  t.push({addr: "total", rwd: totRwd, stk: totStk});
   console.table(t);
 }
 
@@ -50,7 +55,9 @@ await balances();
 
 console.log(`minting`);
 
-await RWD.mint(accDeployer, 100);
+const rewardsPerBlock = 100;
+const duration = 30;
+await RWD.mint(accDeployer, rewardsPerBlock * duration);
 for (const acc of accStakers) {
   await STK.mint(acc, 10);
 }
@@ -68,8 +75,8 @@ const pDeployer = ctcDeployer.p.Deployer({
   opts: {
     rewardToken: RWD.id,
     stakeToken: STK.id,
-    rewardsPerBlock: 10,
-    duration: 10,
+    rewardsPerBlock,
+    duration,
   },
   readyForStakers: () => resolveReadyForStakers(),
 });
@@ -104,13 +111,12 @@ const tryStake = async (i, amt) => {
   await tryApi('stake', 'staked', i, amt);
   await tryViewFor('staked', i);
 };
-// const tryHarvest = async (i) => await tryApi('harvest', 'harvested', i);
-const tryHarvest = async (i) => console.log(`TODO: fix harvest`); // XXX
-const tryWithdraw = async (i, amt) => await tryApi('withdraw', 'withdrew', i, amt);
-// const tryWithdraw = async (i, amt) => {
-//   if (i == 0 && amt == 6) { throw Error('this is supposed to fail'); };
-//   console.log(`TODO: fix withdraw`); // XXX
-// };
+const tryHarvest = async (i) => await tryApi('harvest', 'harvested', i);
+// const tryHarvest = async (i) => console.log(`TODO: fix harvest`); // XXX
+const tryWithdraw = async (i, amt) => {
+  await tryApi('withdraw', 'withdrew', i, amt);
+  await tryViewFor('staked', i);
+};
 
 function pretty(r) {
   if (!r) {
@@ -119,8 +125,14 @@ function pretty(r) {
     return r;
   } else if (r._isBigNumber) {
     return r.toString();
-  } else if (r.networkAccount && r.networkAccount.addr) {
-    return r.networkAccount.addr.slice(0, 8);
+  } else if (r.networkAccount) {
+    if (r.networkAccount.addr) {
+      return r.networkAccount.addr.slice(0, 8);
+    } else if (r.networkAccount.address) {
+      return r.networkAccount.address.slice(0, 8);
+    } else {
+      return '<some acc>';
+    }
   } else if (Array.isArray(r) && r[0] == 'Some') {
     return pretty(r[1]);
   } else if (Array.isArray(r)) {
@@ -158,6 +170,7 @@ const stakes = [];
 const stakeAmt = 10;
 for (let i = 0; i < nStakers - 1; i++) {
   stakes.push(tryStake(i, stakeAmt));
+  await stakes[i]; // to have them stake in deterministic order
 }
 await Promise.all(stakes);
 console.log(`n - 1 staked`);
@@ -193,8 +206,9 @@ await tryHarvest(lastStaker);
 console.log(`all staked`);
 await balances();
 
-for (let i = 0; i < nStakers; i++) {
-  tryWithdraw(i, 10);
+for (let i = nStakers - 1; i >= 0; i--) {
+  await tryHarvest(i);
+  await tryWithdraw(i, 10);
 }
 
 await pDeployer;

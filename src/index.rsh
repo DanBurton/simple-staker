@@ -65,9 +65,14 @@ export const main = Reach.App(() => {
 
   const startRewards = rewardsPerBlock * duration;
   Deployer.pay([[startRewards, rewardToken]]);
-  const start = lastConsensusTime();
+  // lct+2 is the soonest someone could stake, so it should start then.
+  // lct = the previous publish
+  // +1 (or more) = this payment
+  // +1 (or more) = the next txn
+  const start = lastConsensusTime() + 2;
   const end = start + duration;
 
+  // TODO: bundle these in the same map to make it possible to do more assertions in the loop invariant
   const Stakes = new Map(UInt);      // amt staked by addr
   const RewardsPaid = new Map(UInt); // amt rewards already "paid" to addr
   // Staking "late" is treated as though "you already got" rewards up until the moment you staked
@@ -164,7 +169,7 @@ export const main = Reach.App(() => {
       (() => {
         const amt = lookupRewards(this);
         assume(amt >= 0); // meaningless?
-        assume(amt <= remainingRewards);
+        assume(amt <= remainingRewards); // user has no control; shouldn't be assumed?
       }),
       (() => [0, [0, stakeToken]]),
       ((k) => {
