@@ -6,10 +6,13 @@ exports.Wrapper = class extends React.Component {
   render() {
     const {content} = this.props;
     return (
-      <div className="Deployer">
+      <>
         <h2>Deployer</h2>
+        Are you ready to deploy?
+        <br />
+        <br />
         {content}
-      </div>
+      </>
     );
   }
 }
@@ -21,7 +24,7 @@ exports.SetOpts = class extends React.Component {
     console.info('SetOpts\' opts!', opts);
 
     return (
-      <button onClick={
+      <button className='SmallButton Deployer' onClick={
         () => parent.deployAfterSettingOptions()
       }>
         Deploy!

@@ -49,10 +49,6 @@ code {
   background-color: var(--DeployerColor);
 }
 
-.LargeButtonContainer {
-  /* padding: 5%; */
-}
-
 .LargeButton {
   background-color: var(--DeployerColor);
   border-radius: 16px;
@@ -72,6 +68,10 @@ code {
 
 .LargeButton > p {
   font-size: small;
+}
+
+.SmallButton {
+  font-weight: bold;
 }
 
 .MainContentContainer {
