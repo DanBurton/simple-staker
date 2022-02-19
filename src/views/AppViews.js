@@ -24,10 +24,32 @@ exports.SelectNetwork = class extends React.Component {
     return (
       <>
         <p className='MainContent'>
+          <small>
+            DISCLAIMER: this software is provided as is,
+            <br />
+            with no guarantees.
+            <br />
+            Use at your own risk.
+          </small>
+          <br /><br />
           Select a network
         </p>
         <button onClick={() => parent.selectNetwork('ALGO', 'TestNet')}
         >Algorand TestNet</button>
+        <br />
+        <br />
+        <button onClick={() => parent.selectNetwork('ALGO', 'MainNet')}
+        >Algorand MainNet</button>
+        <br />
+        {/*
+        <br />
+        <button onClick={() => parent.selectNetwork('ETH', 'TestNet')}
+        >Ethereum TestNet (ropsten)</button>
+        <br />
+        <br />
+        <button onClick={() => parent.selectNetwork('ETH', 'MainNet')}
+        >Ethereum MainNet (homestead)</button>
+        */}
       </>
     )
   }

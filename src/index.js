@@ -9,10 +9,11 @@ import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
 import pretty from './pretty';
 
-let reach = loadStdlib({
-  REACH_CONNECTOR_MODE: 'ALGO',
-  // REACH_DEBUG: 'yes',
-});
+let reach;
+// let reach = loadStdlib({
+//   REACH_CONNECTOR_MODE: 'ALGO',
+//   // REACH_DEBUG: 'yes',
+// });
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +21,6 @@ class App extends React.Component {
   }
 
   async selectNetwork(REACH_CONNECTOR_MODE, providerEnv) {
-    // TODO: allow for more than just ALGO
     reach = reach || loadStdlib({
       REACH_CONNECTOR_MODE,
       // REACH_DEBUG: 'yes',
