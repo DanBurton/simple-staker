@@ -7,29 +7,34 @@ import './index.css';
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
-const reach = loadStdlib({
-  REACH_CONNECTOR_MODE: 'ALGO',
-  // REACH_DEBUG: 'yes',
-});
 
-const {standardUnit} = reach;
-const defaults = {standardUnit};
-
+let reach = null;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {view: 'ConnectAccount', ...defaults};
+    this.state = {view: 'SelectNetwork'};
+  }
+
+  async selectNetwork(REACH_CONNECTOR_MODE, providerEnv) {
+    reach = reach || loadStdlib({
+      REACH_CONNECTOR_MODE,
+      // REACH_DEBUG: 'yes',
+    });
+    const {standardUnit} = reach;
+    this.setState({view: 'ConnectAccount', providerEnv, standardUnit});
   }
 
   async openWalletPopUp() {
+    const {providerEnv} = this.state;
     reach.setWalletFallback(reach.walletFallback({
       MyAlgoConnect,
-      providerEnv: 'TestNet',
+      providerEnv,
     }));
 
     const acc = await reach.getDefaultAccount();
     const balAtomic = await reach.balanceOf(acc);
     const bal = reach.formatCurrency(balAtomic, 4);
+    console.log(bal);
     this.setState({acc, bal, view: 'RoleSelect'}); // XXX create view
   }
 
@@ -44,18 +49,20 @@ class Deployer extends React.Component {
     this.state = {view: 'SetOpts'}; // XXX create view
   }
 
-  deployAfterSettingOptions() {
-    this.setState( { view: 'Deployed' } );
+  deploy(opts) {
+    const thiz = this;
+    const ctc = this.props.acc.contract(backend);
+    this.setState({view: 'Deploying', ctc});
+    ctc.p.Deployer({
+      opts,
+      readyForStakers: (async () => {
+        const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
+        thiz.setState({view: 'Deployed', ctcInfoStr});
+      }),
+    });
+    this.setState({view: 'Deploying', ctc});
   }
 
-  // TODO
-  // async deploy() {
-  //   const ctc = this.props.acc.contract(backend);
-  //   this.setState({view: 'Deploying', ctc});
-  //   ctc.p.Alice(this);
-  //   const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
-  //   this.setState({view: 'WaitingForAttacher', ctcInfoStr});
-  // }
   render() { return renderView(this, DeployerViews); }
 }
 class Staker extends React.Component {

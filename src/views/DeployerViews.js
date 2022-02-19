@@ -15,14 +15,18 @@ exports.Wrapper = class extends React.Component {
   }
 }
 
+const defaultRewardToken = 71886079;
+const defaultStakeToken = 71886755;
+const defaultRewardsPerBlock = 100;
+const defaultDuration = 30;
 exports.SetOpts = class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rewardToken: '',
-      stakeToken: '',
-      rewardsPerBlock: '',
-      duration: ''
+      rewardToken: defaultRewardToken,
+      stakeToken: defaultStakeToken,
+      rewardsPerBlock: defaultRewardsPerBlock,
+      duration: defaultDuration,
     };
 
     // https://www.geeksforgeeks.org/
@@ -46,8 +50,7 @@ exports.SetOpts = class extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     console.info('Wrapper state on submit!', this.state);
-    // @TODO
-    this.props.parent.something(this.state);
+    this.props.parent.deploy(this.state);
   }
 
   render() {
@@ -60,9 +63,9 @@ exports.SetOpts = class extends React.Component {
           <input
             name='rewardToken'
             onChange={this.handleChange}
-            placeholder='50'
+            placeholder={defaultRewardToken}
             type='number'
-            value={this.state.rewardToken}
+            value={this.state.rewardToken || defaultRewardToken}
           />
           <br />
           <br />
@@ -70,9 +73,9 @@ exports.SetOpts = class extends React.Component {
           <input
             name='stakeToken'
             onChange={this.handleChange}
-            placeholder='1337'
+            placeholder={defaultStakeToken}
             type='number'
-            value={this.state.stakeToken}
+            value={this.state.stakeToken || defaultStakeToken}
           />
           <br />
           <br />
@@ -80,9 +83,9 @@ exports.SetOpts = class extends React.Component {
           <input
             name='rewardsPerBlock'
             onChange={this.handleChange}
-            placeholder='123'
+            placeholder={defaultRewardsPerBlock}
             type='number'
-            value={this.state.rewardsPerBlock}
+            value={this.state.rewardsPerBlock || defaultRewardsPerBlock}
           />
           <br />
           <br />
@@ -90,9 +93,9 @@ exports.SetOpts = class extends React.Component {
           <input
             name='duration'
             onChange={this.handleChange}
-            placeholder='32'
+            placeholder={defaultDuration}
             type='number'
-            value={this.state.duration}
+            value={this.state.duration || defaultDuration}
           />
           <br />
           <br />
@@ -124,15 +127,16 @@ exports.Deploy = class extends React.Component {
 exports.Deploying = class extends React.Component {
   render() {
     return (
-      <div>Deploying... please wait.</div>
+      <div>Deploying... please sign the transactions to deploy the contract and fund it with rewards.</div>
     );
   }
 }
 
 exports.Deployed = class extends React.Component {
   getApplicationId() {
-    const applicationID = 'placeHolderApplicationID';
-    localStorage.setItem('Application ID!', applicationID);
+    const {ctcInfoStr} = this.props;
+    const applicationID = JSON.parse(ctcInfoStr);
+    localStorage.setItem('ApplicationID', applicationID);
     return applicationID;
   }
 
@@ -141,7 +145,7 @@ exports.Deployed = class extends React.Component {
       <React.Fragment>
         <main>Deployed!</main>
         <p>The application ID is</p>
-        <p>${this.getApplicationId()}</p>
+        <p>{this.getApplicationId()}</p>
       </React.Fragment>
     );
   }

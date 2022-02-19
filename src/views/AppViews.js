@@ -18,6 +18,21 @@ exports.Wrapper = class extends React.Component {
   }
 }
 
+exports.SelectNetwork = class extends React.Component {
+  render() {
+    const { parent } = this.props;
+    return (
+      <>
+        <p className='MainContent'>
+          Select a network
+        </p>
+        <button onClick={() => parent.selectNetwork('ALGO', 'TestNet')}
+        >Algorand TestNet</button>
+      </>
+    )
+  }
+}
+
 exports.ConnectAccount = class extends React.Component {
   render() {
     const { parent } = this.props;
