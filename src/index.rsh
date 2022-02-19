@@ -45,6 +45,7 @@ export const main = Reach.App(() => {
     opts: Opts,
     totalStaked: UInt,
     remainingRewards: UInt,
+    end: UInt,
     staked: Fun([Address], UInt),
     rewardsAvailableAt: Fun([Address, UInt /* round */], UInt),
   });
@@ -68,6 +69,7 @@ export const main = Reach.App(() => {
   // +1 (or more) = the next txn
   const start = lastConsensusTime() + 2;
   const end = start + duration;
+  V.end.set(end);
 
   // TODO: bundle these in the same map to make it possible to do more assertions in the loop invariant
   const Stakes = new Map(UInt);      // amt staked by addr
@@ -76,6 +78,7 @@ export const main = Reach.App(() => {
 
   const lookupStaked = (addr) => fromSome(Stakes[addr], 0);
   const lookupRewardsPaid = (addr) => fromSome(RewardsPaid[addr], 0);
+  V.staked.set(lookupStaked);
 
   assert(startRewards == duration * rewardsPerBlock, "enough rewards");
 
@@ -119,7 +122,6 @@ export const main = Reach.App(() => {
       const lookupRewards = (addr) => lookupRewardsAt(addr, lct);
       V.totalStaked.set(totalStaked);
       V.remainingRewards.set(remainingRewards);
-      V.staked.set(lookupStaked);
       V.rewardsAvailableAt.set(lookupRewardsAt);
     })
     .invariant(     balance() == 0
@@ -187,6 +189,10 @@ export const main = Reach.App(() => {
       }))
   commit();
   Deployer.publish();
-  transfer([[remainingRewards, rewardToken]]).to(Deployer);
+  // May be non-zero based on staker behavior
+  transfer([[balance(rewardToken), rewardToken]]).to(Deployer);
+  // These two should be 0, but just in case.
+  transfer([[balance(stakeToken), stakeToken]]).to(Deployer);
+  transfer(balance()).to(Deployer);
   commit();
 });

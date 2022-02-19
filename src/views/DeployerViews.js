@@ -151,4 +151,10 @@ exports.Deployed = class extends React.Component {
   }
 }
 
+exports.Done  = class extends React.Component {
+  render() {
+    return <>The contract has run to completion</>;
+  }
+}
+
 export default exports;

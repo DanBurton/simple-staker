@@ -15,6 +15,12 @@ exports.Wrapper = class extends React.Component {
 }
 
 exports.Attach = class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ctcInfoStr: localStorage.getItem('ApplicationID') || '',
+    }
+  }
   render() {
     const {parent} = this.props;
     const {ctcInfoStr} = this.state || {};
@@ -29,6 +35,7 @@ exports.Attach = class extends React.Component {
           onChange={(e) => this.setState({ctcInfoStr: e.currentTarget.value})}
           spellCheck="false"
           type='text'
+          value={ctcInfoStr}
         />
         <br />
         <br />
@@ -54,33 +61,48 @@ exports.Attaching = class extends React.Component {
 
 exports.ApplicationInfo = class extends React.Component {
   render() {
+    const {parent} = this.props;
+    const {opts, totalStaked, remainingRewards, end, staked, rewardsAvailableAt, now} = this.props;
+    const {rewardToken, stakeToken, rewardsPerBlock, duration} = opts;
     return (
       <main>
           <h1>Tokens!</h1>
-          <p>tokens placeholder...</p>
+          <p>RewardToken: {rewardToken}</p>
+          <p>StakeToken: {stakeToken}</p>
+          <p>Duration: {duration} rounds</p>
 
           <h1>Current amount staked</h1>
-          <p>123 placeholder</p>
+          <p>You have staked {staked || '?'} of the {totalStaked} total staked.</p>
 
-          <h1>Rewards per block</h1>
-          <p>You earned</p>
-          <p>numRewards</p>
-          <p>on this block!</p>
+          <h1>Rewards</h1>
+          <p>Shared with everyone per block: {rewardsPerBlock}</p>
+          <p>Total rewards remaining in the contract: {remainingRewards}</p>
+          <p>You can harvest an estimated: {rewardsAvailableAt || 0}</p>
 
           <h1>This reward period ends on</h1>
-          <p>reward period end date placeholder</p>
+          <p>round {end}</p>
+          <p>(Now is approximately round {now})</p>
 
-          <button onClick={() => console.log('staking!')}>
+          {/* TODO: field for amt */}
+          <button onClick={() => parent.stake(10)}>
             Stake!
           </button>
-          <button onClick={() => console.log('HARVEST!')}>
+          <button onClick={() => parent.harvest()}>
             HARVEST!
           </button>
-          <button onClick={() => console.log('Withdraw!')}>
+          {/* TODO: field for amt */}
+          <button onClick={() => parent.withdraw(10)}>
             Withdraw
           </button>
       </main>
     );
+  }
+}
+
+exports.Failure = class extends React.Component {
+  render() {
+    const {ctcInfoStr} = this.props;
+    return <>Unable to retrieve info for Application {ctcInfoStr}</>;
   }
 }
 

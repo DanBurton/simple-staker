@@ -7,8 +7,12 @@ import './index.css';
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
+import pretty from './pretty';
 
-let reach = null;
+let reach = loadStdlib({
+  REACH_CONNECTOR_MODE: 'ALGO',
+  // REACH_DEBUG: 'yes',
+});
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +20,7 @@ class App extends React.Component {
   }
 
   async selectNetwork(REACH_CONNECTOR_MODE, providerEnv) {
+    // TODO: allow for more than just ALGO
     reach = reach || loadStdlib({
       REACH_CONNECTOR_MODE,
       // REACH_DEBUG: 'yes',
@@ -49,11 +54,11 @@ class Deployer extends React.Component {
     this.state = {view: 'SetOpts'}; // XXX create view
   }
 
-  deploy(opts) {
+  async deploy(opts) {
     const thiz = this;
     const ctc = this.props.acc.contract(backend);
     this.setState({view: 'Deploying', ctc});
-    ctc.p.Deployer({
+    const deployerP = ctc.p.Deployer({
       opts,
       readyForStakers: (async () => {
         const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
@@ -61,6 +66,9 @@ class Deployer extends React.Component {
       }),
     });
     this.setState({view: 'Deploying', ctc});
+
+    await deployerP;
+    this.setState({view: 'Done'});
   }
 
   render() { return renderView(this, DeployerViews); }
@@ -70,25 +78,73 @@ class Staker extends React.Component {
     super(props);
     this.state = {view: 'Attach'}; // XXX create view
   }
-  attach(ctcInfoStr) {
-    const ctc = this.props.acc.contract(backend, JSON.parse(ctcInfoStr));
-    this.setState({ctc, view: 'Attaching'});
+
+  async _refreshInfo(acc, ctc) {
+    const runView = async (vname, ...args) => {
+      const res = await ctc.views[vname](...args);
+      if (res[0] != 'Some') { console.warn(vname, res); return; }
+      return pretty(res);
+    }
+    const runViews = async (vs) => {
+      const data = {};
+      for (const [vname, ...args] of vs) {
+        const res = await runView(vname, ...args);
+        data[vname] = res;
+      }
+      return data;
+    }
+    const now = pretty(await reach.getNetworkTime());
+    const data = {
+      ...(await runViews([
+        ['opts'],
+        ['totalStaked'],
+        ['remainingRewards'],
+        ['end'],
+        ['staked', acc],
+        ['rewardsAvailableAt', acc, now],
+      ])),
+      now,
+    };
+
+    if (!data.opts) {
+      this.setState({view: 'Failure'});
+      return;
+    }
+    this.setState({...data, view: 'ApplicationInfo'});
   }
 
-  // TODO
-  // async acceptWager(wagerAtomic) { // Fun([UInt], Null)
-  //   const wager = reach.formatCurrency(wagerAtomic, 4);
-  //   return await new Promise(resolveAcceptedP => {
-  //     this.setState({view: 'AcceptTerms', wager, resolveAcceptedP});
-  //   });
-  // }
-  // termsAccepted() {
-  //   this.state.resolveAcceptedP();
-  //   this.setState({view: 'WaitingForTurn'});
-  // }
+  async attach(ctcInfoStr) {
+    const acc = this.props.acc;
+    const ctc = acc.contract(backend, JSON.parse(ctcInfoStr));
+    this.setState({ctc, ctcInfoStr, view: 'Attaching'});
+    await this._refreshInfo(acc, ctc);
+  }
 
+  async stake(amt) {
+    const {acc, ctc} = this.state;
+    console.log('stake()');
+    const res = await ctc.apis.Staker.stake(amt);
+    console.log(res);
+    await this._refreshInfo(acc, ctc);
+  }
+
+  async harvest() {
+    const {acc, ctc} = this.state;
+    console.log('harvest()');
+    const res = await ctc.apis.Staker.harvest();
+    console.log(res);
+    await this._refreshInfo(acc, ctc);
+  }
+
+  async withdraw(amt) {
+    const {acc, ctc} = this.state;
+    console.log('withdraw()');
+    const res = await ctc.apis.Staker.withdraw(amt);
+    console.log(res);
+    await this._refreshInfo(acc, ctc);
+  }
   render() {
-    console.info('Staker\'s props!', this.props);
+    // console.info('Staker\'s props!', this.props);
     return renderView(this, StakerViews);
   }
 }
