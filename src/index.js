@@ -4,7 +4,7 @@ import DeployerViews from './views/DeployerViews';
 import StakerViews from './views/StakerViews';
 import {renderDOM, renderView} from './views/render';
 import './index.css';
-// import * as backend from './build/index.main.mjs';
+import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
 const reach = loadStdlib({
@@ -63,12 +63,10 @@ class Staker extends React.Component {
     super(props);
     this.state = {view: 'Attach'}; // XXX create view
   }
-  // TODO
-  // attach(ctcInfoStr) {
-  //   const ctc = this.props.acc.contract(backend, JSON.parse(ctcInfoStr));
-  //   this.setState({view: 'Attaching'});
-  //   backend.Bob(ctc, this);
-  // }
+  attach(ctcInfoStr) {
+    const ctc = this.props.acc.contract(backend, JSON.parse(ctcInfoStr));
+    this.setState({ctc, view: 'Attaching'});
+  }
 
   // TODO
   // async acceptWager(wagerAtomic) { // Fun([UInt], Null)
@@ -82,7 +80,10 @@ class Staker extends React.Component {
   //   this.setState({view: 'WaitingForTurn'});
   // }
 
-  render() { return renderView(this, StakerViews); }
+  render() {
+    console.info('Staker\'s props!', this.props);
+    return renderView(this, StakerViews);
+  }
 }
 
 renderDOM(<App />);

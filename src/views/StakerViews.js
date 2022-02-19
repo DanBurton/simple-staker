@@ -26,7 +26,6 @@ exports.Attach = class extends React.Component {
         <br />
         <br />
         <input
-          className='ContractInfo'
           onChange={(e) => this.setState({ctcInfoStr: e.currentTarget.value})}
           spellCheck="false"
           type='text'

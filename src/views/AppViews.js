@@ -35,6 +35,8 @@ exports.ConnectAccount = class extends React.Component {
         <button className='MyAlgoWalletButton' onClick={
           () => parent.openWalletPopUp()
         }>MyAlgoConnect</button>
+        <br />
+        <br />
       </>
     )
   }

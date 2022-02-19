@@ -85,9 +85,10 @@ code {
   font-size: medium;
   font-weight: normal;
   margin: auto;
-  height: 400px;
+  margin-top: -1%;
   left: 456px;
   top: 291px;
+  padding-bottom: 2%;
   width: 50%;
 }
 
@@ -123,16 +124,16 @@ button {
   font-size: calc(10px + 2vmin);
 }
 
-textarea {
-  font-size: calc(10px + 2vmin);
-}
-
-.ContractInfo {
+input {
   border-radius: 16px;
   border: 1px black solid;
-  font-size: calc(10px + 1vmin);
+  padding: 1%;
   text-align: left;
   overflow-x: scroll;
   white-space: pre;
   width: 50%;
+}
+
+textarea {
+  font-size: calc(10px + 2vmin);
 }
