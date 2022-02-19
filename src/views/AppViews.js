@@ -23,8 +23,8 @@ exports.ConnectAccount = class extends React.Component {
     const { parent } = this.props;
     const ctcInfoStr = false;
     const thing = 'applicationID';
-    console.info('props!', this.props);
-    console.info('parent!', parent);
+    console.info('ConnectAccount\'s props!', this.props);
+    console.info('ConnectAccount\'s parent!', parent);
     return (
       <>
         <p className='MainContent'>
