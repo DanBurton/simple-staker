@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/simple-staker/static/css/main.943e560a.css",
-    "main.js": "/simple-staker/static/js/main.4426884d.js",
+    "main.css": "/simple-staker/static/css/main.89dd5eb5.css",
+    "main.js": "/simple-staker/static/js/main.bc70236c.js",
     "static/media/Green_background.png": "/simple-staker/static/media/Green_background.cc516d86eecac37107b3.png",
     "index.html": "/simple-staker/index.html",
-    "main.943e560a.css.map": "/simple-staker/static/css/main.943e560a.css.map",
-    "main.4426884d.js.map": "/simple-staker/static/js/main.4426884d.js.map"
+    "main.89dd5eb5.css.map": "/simple-staker/static/css/main.89dd5eb5.css.map",
+    "main.bc70236c.js.map": "/simple-staker/static/js/main.bc70236c.js.map"
   },
   "entrypoints": [
-    "static/css/main.943e560a.css",
-    "static/js/main.4426884d.js"
+    "static/css/main.89dd5eb5.css",
+    "static/js/main.bc70236c.js"
   ]
 }
