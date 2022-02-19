@@ -40,9 +40,6 @@ export const main = Reach.App(() => {
     stake: Fun([UInt], StakeUpdate),
     harvest: Fun([], RewardsUpdate),
     withdraw: Fun([UInt], StakeUpdate),
-    refresh: Fun([], Null),
-    // TODO
-    // declareNext: Fun([UInt], Null),
   });
   const V = View({
     opts: Opts,
@@ -136,15 +133,6 @@ export const main = Reach.App(() => {
       )
     .paySpec([stakeToken])
     .while(totalStaked != 0 || lct <= end)
-    .api(Staker.refresh,
-      // XXX make it possible to declare rewards up to a given time
-      // It seems like this does nothing.
-      // But what it's actually doing is forcing an update of lct
-      ((k) => {
-        k(null);
-        return [totalStaked, remainingRewards, lct, availableRewards];
-      })
-    )
     .api(Staker.stake,
       ((amt) => [0, [amt, stakeToken]]),
       ((amt, k) => {
