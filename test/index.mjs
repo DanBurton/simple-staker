@@ -20,6 +20,9 @@ console.log(`launching tokens`);
 const RWD = await reach.launchToken(accAdmin, 'reward', 'RWD');
 const STK = await reach.launchToken(accAdmin, 'stake', 'STK');
 
+console.log(`RWD.id: ${RWD.id}`);
+console.log(`STK.id: ${STK.id}`);
+
 for (const acc of [accDeployer, ...accStakers]) {
   for (const tok of [RWD, STK]) {
     await acc.tokenAccept(tok.id);

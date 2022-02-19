@@ -80,6 +80,8 @@ export const main = Reach.App(() => {
   const lookupStaked = (addr) => fromSome(Stakes[addr], 0);
   const lookupRewardsPaid = (addr) => fromSome(RewardsPaid[addr], 0);
 
+  assert(startRewards == duration * rewardsPerBlock, "enough rewards");
+
   Deployer.interact.readyForStakers();
   const  [totalStaked, remainingRewards, rewardsLastRefreshed, lastAvailableRewards] =
     parallelReduce([0,     startRewards,                start,                    0])
@@ -89,14 +91,33 @@ export const main = Reach.App(() => {
         // You might think it's this, but it's not:
         // return rewardsPerBlock * min(duration, when - start);
         // It's this:
-        return lastAvailableRewards + (zsub(min(end, when), rewardsLastRefreshed) * rewardsPerBlock);
+
+        // JAY: The error is that after a call to Staker.withdraw, we
+        // re-evaluate this. (NOTE: We should add that to the stack trace
+        // somehow.) And, time has advanced, meaning there's another block worth
+        // of reward added. BUT, we don't ensure that the remaining reward
+        // includes that block.
+
+        // DAN: doing the hacky easy thing for now.
+        const amt = min(
+          lastAvailableRewards + (zsub(min(end, when), rewardsLastRefreshed) * rewardsPerBlock),
+          remainingRewards
+        );
+        assert(amt <= remainingRewards, "reward less than remaining");
+        return amt;
       }
       const availableRewards = totAvailableRewardsAt(lct)
       const lookupRewardsAt = (addr, when) => {
         const youStaked = lookupStaked(addr);
         const youAlreadyGot = lookupRewardsPaid(addr);
         assert(youStaked <= totalStaked);
-        return zsub((totAvailableRewardsAt(when) * youStaked) / totalStaked, youAlreadyGot);
+        // DAN: doing the hacky thing
+        const amt = min(
+          zsub(muldiv(totAvailableRewardsAt(when), youStaked, totalStaked), youAlreadyGot),
+          availableRewards
+        );
+        assert(amt <= availableRewards);
+        return amt;
       };
       const lookupRewards = (addr) => lookupRewardsAt(addr, lct);
       V.totalStaked.set(totalStaked);

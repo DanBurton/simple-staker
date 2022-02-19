@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "npm run recompile && react-scripts build",
-    "recompile": "(cd src && ../reach compile)",
+    "recompile": "(cd src && ../reach compile --intermediate-files)",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "REACH_CONNECTOR_MODE=ALGO ./reach run test",
