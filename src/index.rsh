@@ -175,16 +175,10 @@ export const main = Reach.App(() => {
         return [newEveryoneStaked, remainingRewards, lct, availableRewards];
       }))
     .api(Staker.harvest,
-      (() => {
-        const amt = lookupRewards(this);
-        assume(amt >= 0); // meaningless?
-        assume(amt <= remainingRewards); // user has no control; shouldn't be assumed?
-      }),
       (() => [0, [0, stakeToken]]),
       ((k) => {
         const amt = lookupRewards(this);
-        // XXX This should be an assert instead of assume/require
-        require(amt <= remainingRewards);
+        assert(amt <= remainingRewards);
         transfer([[amt, rewardToken]]).to(this);
         const totalRemaining = remainingRewards - amt;
         RewardsPaid[this] = lookupRewardsPaid(this) + amt;
