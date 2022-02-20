@@ -87,10 +87,18 @@ class Staker extends React.Component {
     }
     const runViews = async (vs) => {
       const data = {};
+      const promises = [];
       for (const [vname, ...args] of vs) {
-        const res = await runView(vname, ...args);
-        data[vname] = res;
+        const p = (async () => {
+          const res = await runView(vname, ...args);
+          data[vname] = res;
+        })();
+        promises.push(p);
+        // For some reason we *do* need to perform these queries serially,
+        // or else they all come back None. =[
+        await p;
       }
+      await Promise.all(promises);
       return data;
     }
     const now = pretty(await reach.getNetworkTime());

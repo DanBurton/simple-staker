@@ -59,7 +59,14 @@ exports.Attaching = class extends React.Component {
   }
 }
 
+const defaultAmt = 10;
 exports.ApplicationInfo = class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      amt: defaultAmt,
+    }
+  }
   render() {
     const {parent, ctcInfoStr} = this.props;
     const {opts, totalStaked, remainingRewards, end, staked, rewardsAvailableAt, now} = this.props;
@@ -83,24 +90,32 @@ exports.ApplicationInfo = class extends React.Component {
           <h1>Rewards</h1>
           <p>Shared with everyone per block: {rewardsPerBlock}</p>
           <p>Total rewards remaining in the contract: {remainingRewards}</p>
-          <p>You can harvest an estimated: {rewardsAvailableAt || 0}</p>
+          <p>You can harvest an estimated: {rewardsAvailableAt || '?'}</p>
 
           <h1>This reward period ends on</h1>
           <p>round {end}</p>
           <p>(Now is approximately round {now})</p>
 
-          {/* TODO: field for amt */}
-          <button onClick={() => parent.stake(10)}>
+          <input
+            onChange={(e) => this.setState({amt: e.currentTarget.value})}
+            spellCheck="false"
+            type='number'
+            placeholder={defaultAmt}
+            value={this.state.amt}
+          />
+          <br />
+          <button onClick={() => parent.stake(this.state.amt)}>
             Stake!
           </button>
+          <button onClick={() => parent.withdraw(this.state.amt)}>
+            Withdraw
+          </button>
+          <hr />
           <button onClick={() => parent.harvest()}>
             HARVEST!
           </button>
-          {/* TODO: field for amt */}
-          <button onClick={() => parent.withdraw(10)}>
-            Withdraw
-          </button>
-          <button disabled={end > now && totalStaked == 0} onClick={() => parent.halt()}>
+          <br />
+          <button disabled={now < end || 0 < totalStaked} onClick={() => parent.halt()}>
             Halt
           </button>
       </main>
