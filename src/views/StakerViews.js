@@ -27,8 +27,7 @@ exports.Attach = class extends React.Component {
     const thing = connector == 'ALGO' ? 'Application ID' : 'contract address';
     return (
       <div>
-        Please paste the {thing} to attach to.
-        One possible source of this is from deploying the contract.
+        Please paste the {thing} of the staking pool.
         <br />
         <br />
         <input

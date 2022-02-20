@@ -7,8 +7,8 @@ exports.Wrapper = class extends React.Component {
     const {content} = this.props;
     return (
       <>
-        <h2>Deployer</h2>
-        Fill out these fields, and then deploy!
+        <h2>Staking Pool Creator</h2>
+        Fill out these fields, and create a staking pool!
         {content}
       </>
     );
@@ -103,7 +103,7 @@ exports.SetOpts = class extends React.Component {
             className='Deployer SmallButton'
             type='submit'
           >
-            Deploy!
+            Create Staking Pool!
           </button>
         </form>
       </>
@@ -118,7 +118,7 @@ exports.Deploy = class extends React.Component {
       <div>
         <button
           onClick={() => parent.deploy()}
-        >Deploy</button>
+        >Create Staking Pool</button>
       </div>
     );
   }
@@ -127,7 +127,7 @@ exports.Deploy = class extends React.Component {
 exports.Deploying = class extends React.Component {
   render() {
     return (
-      <div>Deploying... please sign the transactions to deploy the contract and fund it with rewards.</div>
+      <div>Creating pool... please sign the transactions to deploy the contract and fund it with rewards.</div>
     );
   }
 }
@@ -135,16 +135,17 @@ exports.Deploying = class extends React.Component {
 exports.Deployed = class extends React.Component {
   getApplicationId() {
     const {ctcInfoStr} = this.props;
-    const applicationID = JSON.parse(ctcInfoStr);
-    localStorage.setItem('ApplicationID', applicationID);
-    return applicationID;
+    localStorage.setItem('ApplicationID', ctcInfoStr);
+    return ctcInfoStr;
   }
 
   render() {
+    const {connector} = this.props;
+    const thing = connector == 'ALGO' ? 'Application ID' : 'contract address';
     return (
       <React.Fragment>
-        <main>Deployed!</main>
-        <p>The application ID is</p>
+        <main>Staking Pool created!</main>
+        <p>The {thing} is</p>
         <p>{this.getApplicationId()}</p>
       </React.Fragment>
     );

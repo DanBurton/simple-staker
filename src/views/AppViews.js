@@ -99,10 +99,10 @@ exports.RoleSelect = class extends React.Component {
           <button className='LargeButton Deployer'
             onClick={() => parent.selectDeployer()}
           >
-            <h1>Deployer</h1>
+            <h1>Creator</h1>
 
             <p>
-              Incentivise others to stake by deploying and funding a contract with rewards.
+              Incentivise others to stake by creating and funding a staking pool with rewards.
             </p>
           </button>
           <button className='LargeButton Staker'
@@ -111,7 +111,7 @@ exports.RoleSelect = class extends React.Component {
             <h1>Staker</h1>
 
             <p>
-            Stake in a deployed contract to receive its rewards.
+            Stake in a staking pool to gain access to its rewards over time.
             </p>
           </button>
         </span>
