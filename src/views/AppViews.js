@@ -60,12 +60,14 @@ exports.ConnectAccount = class extends React.Component {
     const { parent } = this.props;
     const ctcInfoStr = false;
     const thing = 'applicationID';
-    console.info('ConnectAccount\'s props!', this.props);
-    console.info('ConnectAccount\'s parent!', parent);
+    const isMyAlgo = true;
+    // console.info('ConnectAccount\'s props!', this.props);
+    // console.info('ConnectAccount\'s parent!', parent);
     return (
       <>
         <p className='MainContent'>
           Please click the button to connect your account.
+          {isMyAlgo ? <><br />You may need to disable your popup blocker</> : ''}
         </p>
         <br />
         <br />
