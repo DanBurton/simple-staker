@@ -106,10 +106,6 @@ class Staker extends React.Component {
       now,
     };
 
-    if (!data.opts) {
-      this.setState({view: 'Failure'});
-      return;
-    }
     this.setState({...data, view: 'ApplicationInfo'});
   }
 
@@ -120,29 +116,30 @@ class Staker extends React.Component {
     await this._refreshInfo(acc, ctc);
   }
 
-  async stake(amt) {
+  async _api(which, name, ...args) {
     const {acc, ctc} = this.state;
-    console.log('stake()');
-    const res = await ctc.apis.Staker.stake(amt);
-    console.log(res);
+    console.log(`calling api: ${which}.${name}`);
+    const res = await ctc.apis[which][name](...args);
+    console.log(pretty(res));
     await this._refreshInfo(acc, ctc);
+  }
+
+  async stake(amt) {
+    return this._api('Staker', 'stake', amt);
   }
 
   async harvest() {
-    const {acc, ctc} = this.state;
-    console.log('harvest()');
-    const res = await ctc.apis.Staker.harvest();
-    console.log(res);
-    await this._refreshInfo(acc, ctc);
+    return this._api('Staker', 'harvest');
   }
 
   async withdraw(amt) {
-    const {acc, ctc} = this.state;
-    console.log('withdraw()');
-    const res = await ctc.apis.Staker.withdraw(amt);
-    console.log(res);
-    await this._refreshInfo(acc, ctc);
+    return this._api('Staker', 'withdraw', amt);
   }
+
+  async halt() {
+    return this._api('Any', 'halt');
+  }
+
   render() {
     // console.info('Staker\'s props!', this.props);
     return renderView(this, StakerViews);

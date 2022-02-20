@@ -41,6 +41,9 @@ export const main = Reach.App(() => {
     harvest: Fun([], RewardsUpdate),
     withdraw: Fun([UInt], StakeUpdate),
   });
+  const Any = API('Any', {
+    halt: Fun([], Null),
+  });
   const V = View({
     opts: Opts,
     totalStaked: UInt,
@@ -188,11 +191,14 @@ export const main = Reach.App(() => {
         return [totalStaked, totalRemaining, lct, availableRewards - amt];
       }))
   commit();
-  Deployer.publish();
+  fork()
+    .case(Deployer, () => ({}), () => 0, () => {})
+    .api(Any.halt, (k) => { k(null); });
   // May be non-zero based on staker behavior
   transfer([[balance(rewardToken), rewardToken]]).to(Deployer);
   // These two should be 0, but just in case.
   transfer([[balance(stakeToken), stakeToken]]).to(Deployer);
   transfer(balance()).to(Deployer);
   commit();
+  exit();
 });

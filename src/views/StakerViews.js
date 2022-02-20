@@ -61,11 +61,17 @@ exports.Attaching = class extends React.Component {
 
 exports.ApplicationInfo = class extends React.Component {
   render() {
-    const {parent} = this.props;
+    const {parent, ctcInfoStr} = this.props;
     const {opts, totalStaked, remainingRewards, end, staked, rewardsAvailableAt, now} = this.props;
-    const {rewardToken, stakeToken, rewardsPerBlock, duration} = opts;
+    const {rewardToken, stakeToken, rewardsPerBlock, duration} = opts || {};
     return (
       <main>
+          {opts ? '' : <p>
+            WARNING: Unable to retrieve info for Application {ctcInfoStr}.
+            It may already be deleted.
+            You can still click the buttons below but they may not work correctly.
+          </p>}
+
           <h1>Tokens!</h1>
           <p>RewardToken: {rewardToken}</p>
           <p>StakeToken: {stakeToken}</p>
@@ -94,15 +100,11 @@ exports.ApplicationInfo = class extends React.Component {
           <button onClick={() => parent.withdraw(10)}>
             Withdraw
           </button>
+          <button disabled={end > now && totalStaked == 0} onClick={() => parent.halt()}>
+            Halt
+          </button>
       </main>
     );
-  }
-}
-
-exports.Failure = class extends React.Component {
-  render() {
-    const {ctcInfoStr} = this.props;
-    return <>Unable to retrieve info for Application {ctcInfoStr}</>;
   }
 }
 
