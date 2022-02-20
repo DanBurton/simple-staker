@@ -79,7 +79,7 @@ exports.SetOpts = class extends React.Component {
           />
           <br />
           <br />
-          <b>Rewards per block: </b>
+          <b>Maximum reward per block: </b>
           <input
             name='rewardsPerBlock'
             onChange={this.handleChange}
