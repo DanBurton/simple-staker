@@ -41,15 +41,10 @@ exports.SelectNetwork = class extends React.Component {
         <button onClick={() => parent.selectNetwork('ALGO', 'MainNet')}
         >Algorand MainNet</button>
         <br />
-        {/*
         <br />
-        <button onClick={() => parent.selectNetwork('ETH', 'TestNet')}
-        >Ethereum TestNet (ropsten)</button>
-        <br />
-        <br />
-        <button onClick={() => parent.selectNetwork('ETH', 'MainNet')}
-        >Ethereum MainNet (homestead)</button>
-        */}
+        <p>Beware: the author has not tested this yet</p>
+        <button onClick={() => parent.selectNetwork('ETH')}
+        >Ethereum<br />or EVM/web3 compatible</button>
       </>
     )
   }
@@ -57,23 +52,33 @@ exports.SelectNetwork = class extends React.Component {
 
 exports.ConnectAccount = class extends React.Component {
   render() {
-    const { parent } = this.props;
+    const { parent, connector } = this.props;
     const ctcInfoStr = false;
-    const thing = 'applicationID';
-    const isMyAlgo = true;
     // console.info('ConnectAccount\'s props!', this.props);
     // console.info('ConnectAccount\'s parent!', parent);
     return (
       <>
         <p className='MainContent'>
           Please click the button to connect your account.
-          {isMyAlgo ? <><br />You may need to disable your popup blocker</> : ''}
+          {connector == 'ALGO' ? <><br />You may need to disable your popup blocker</> : ''}
+          {connector == 'ETH' ? <><br />Select the desired network in MetaMask and refresh the page if necessary.</> : ''}
         </p>
         <br />
         <br />
-        <button className='MyAlgoWalletButton' onClick={
-          () => parent.openWalletPopUp()
-        }>MyAlgoConnect</button>
+        { connector == 'ALGO' ? <>
+          <button className='MyAlgoWalletButton' onClick={
+            () => parent.openWalletPopUp('MyAlgoConnect')
+          }>MyAlgoConnect</button>
+          {/* disabled the WalletConnect option due to technical difficulties
+          <button className='MyAlgoWalletButton' onClick={
+            () => parent.openWalletPopUp('WalletConnect')
+          }>WalletConnect</button>
+          */}
+        </> : <>
+          <button className='MyAlgoWalletButton' onClick={
+            () => parent.openWalletPopUp('MetaMask')
+          }>MetaMask</button>
+        </> }
         <br />
         <br />
       </>

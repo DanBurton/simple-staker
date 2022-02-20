@@ -22,9 +22,9 @@ exports.Attach = class extends React.Component {
     }
   }
   render() {
-    const {parent} = this.props;
+    const {parent, connector} = this.props;
     const {ctcInfoStr} = this.state || {};
-    const thing = 'Application ID'; // XXX
+    const thing = connector == 'ALGO' ? 'Application ID' : 'contract address';
     return (
       <div>
         Please paste the {thing} to attach to.

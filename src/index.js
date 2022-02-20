@@ -7,6 +7,7 @@ import './index.css';
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
 import MyAlgoConnect from '@reach-sh/stdlib/ALGO_MyAlgoConnect';
+// import WalletConnect from '@reach-sh/stdlib/ALGO_WalletConnect';
 import pretty from './pretty';
 
 let reach;
@@ -25,16 +26,27 @@ class App extends React.Component {
       REACH_CONNECTOR_MODE,
       // REACH_DEBUG: 'yes',
     });
-    const {standardUnit} = reach;
-    this.setState({view: 'ConnectAccount', providerEnv, standardUnit});
+    const {connector} = reach;
+    this.setState({view: 'ConnectAccount', providerEnv, connector});
   }
 
-  async openWalletPopUp() {
+  async openWalletPopUp(which) {
     const {providerEnv} = this.state;
-    reach.setWalletFallback(reach.walletFallback({
-      MyAlgoConnect,
-      providerEnv,
-    }));
+    if (which == 'MyAlgoConnect') {
+      reach.setWalletFallback(reach.walletFallback({
+        MyAlgoConnect,
+        providerEnv,
+      }));
+    // Disabled due to technical difficulties
+    // } else if (which = 'WalletConnect') {
+    //   reach.setWalletFallback(reach.walletFallback({
+    //     WalletConnect,
+    //     providerEnv,
+    //   }));
+
+    } else if (which == 'MetaMask') {
+      // Anything to do here? Should just work.
+    }
 
     const acc = await reach.getDefaultAccount();
     const balAtomic = await reach.balanceOf(acc);
@@ -118,8 +130,12 @@ class Staker extends React.Component {
   }
 
   async attach(ctcInfoStr) {
+    const ctcparse = (s) => {
+      try { return JSON.parse(s); }
+      catch (e) { return s;  }
+    };
     const acc = this.props.acc;
-    const ctc = acc.contract(backend, JSON.parse(ctcInfoStr));
+    const ctc = acc.contract(backend, ctcparse(ctcInfoStr));
     this.setState({ctc, ctcInfoStr, view: 'Attaching'});
     await this._refreshInfo(acc, ctc);
   }
