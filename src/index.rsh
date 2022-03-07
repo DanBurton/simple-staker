@@ -26,6 +26,13 @@ const zsub = (x, y) => {
   else { return x - y; }
 }
 const sumf = (m, f) => m.reduce(0, (acc, e) => acc + f(e));
+const muldiv0 = (x, y, z) => {
+  if ( z == 0 ) {
+    return x;
+  } else {
+    return muldiv(x, y, z);
+  }
+};
 
 export const main = Reach.App(() => {
   setOptions({
@@ -115,17 +122,6 @@ export const main = Reach.App(() => {
       const userStakes = () => sumf(Users, (x) => x.stake);
       const lct = lastConsensusTime();
       const totAvailableRewardsAt_i = (when) => (i) => {
-        // You might think it's this, but it's not:
-        // return rewardsPerBlock * min(duration, when - start);
-        // It's this:
-
-        // JAY: The error is that after a call to Staker.withdraw, we
-        // re-evaluate this. (NOTE: We should add that to the stack trace
-        // somehow.) And, time has advanced, meaning there's another block worth
-        // of reward added. BUT, we don't ensure that the remaining reward
-        // includes that block.
-
-        // DAN: doing the hacky easy thing for now.
         const amt = min(
           lastAvailableRewards[i] + (zsub(min(end, when), rewardsLastRefreshed) * rewardsPerBlock[i]),
           remainingRewards[i]
@@ -142,9 +138,8 @@ export const main = Reach.App(() => {
         const youStaked = lookupStaked(addr);
         const youAlreadyGot = lookupRewardsPaid(addr)[i];
         assert(youStaked <= totalStaked);
-        // DAN: doing the hacky thing
         const amt = min(
-          zsub(muldiv(totAvailableRewardsAt_i(when)(i), youStaked, totalStaked), youAlreadyGot),
+          zsub(muldiv0(totAvailableRewardsAt_i(when)(i), youStaked, totalStaked), youAlreadyGot),
           availableRewards[i]
         );
         assert(amt <= availableRewards[i]);
@@ -179,7 +174,7 @@ export const main = Reach.App(() => {
         const currentPaid = lookupRewardsPaid(this);
         const mkNewPaid = (i) => {
           const a = availableRewards[i];
-          const morePaid = muldiv(a, amt, newEveryoneStaked);
+          const morePaid = muldiv0(a, amt, newEveryoneStaked);
           return currentPaid[i] + morePaid;
         };
         Users[this] = {
@@ -203,15 +198,7 @@ export const main = Reach.App(() => {
         const newEveryoneStaked = totalStaked - amt;
         const newUserStaked = oldUserStaked - amt;
         const currentPaid = lookupRewardsPaid(this);
-        const lessPaid = (i) => {
-          // let's not div by 0
-          if (newEveryoneStaked == 0) {
-            // You're the last one out, you have access to take all of the available rewards.
-            return availableRewards[i];
-          } else {
-            return muldiv(availableRewards[i], amt, newEveryoneStaked);
-          }
-        };
+        const lessPaid = (i) => muldiv0(availableRewards[i], amt, newEveryoneStaked);
         // XXX: assert things about currentPaid/lessPaid
         // If lessPaid < currentPaid, this means the user may be losing out on rewards somehow.
         // This is not great, but we are not going to try to always prevent it from happening.
