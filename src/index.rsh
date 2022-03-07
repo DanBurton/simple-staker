@@ -162,13 +162,12 @@ export const main = Reach.App(() => {
     .invariant(               true
       &&   balance(stakeToken) == totalStaked
       &&          userStakes() == totalStaked
+      && totAvailableRewardsAt_i(end)(0) <= remainingRewards[0]
       &&             balance() == remainingRewards[0]
       &&       startRewards[0] >= remainingRewards[0]
       && balance(rewardToken1) == remainingRewards[1]
       &&       startRewards[1] >= remainingRewards[1]
-      // XXX:
-      // && totAvailableRewardsAt(end) <= remainingRewards
-      // Not sure about rounding errors
+      && totAvailableRewardsAt_i(end)(1) <= remainingRewards[1]
       )
     .paySpec([stakeToken])
     .while(totalStaked != 0 || lct <= end)
