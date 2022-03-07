@@ -25,6 +25,7 @@ const zsub = (x, y) => {
   if (y >= x) { return 0; }
   else { return x - y; }
 }
+const sumf = (m, f) => m.reduce(0, (acc, e) => acc + f(e));
 
 export const main = Reach.App(() => {
   setOptions({
@@ -80,13 +81,23 @@ export const main = Reach.App(() => {
   const end = start + duration;
   V.end.set(end);
 
-  // TODO: bundle these in the same map to make it possible to do more assertions in the loop invariant
-  const Stakes = new Map(UInt);      // amt staked by addr
-  const RewardsPaid = new Map(Rewards); // amt rewards already "paid" to addr
+  const UserData = Object({
+    stake: UInt,
+    rewards: Rewards,
+  });
+  const Users = new Map(UserData);
   // Staking "late" is treated as though "you already got" rewards up until the moment you staked
 
-  const lookupStaked = (addr) => fromSome(Stakes[addr], 0);
-  const lookupRewardsPaid = (addr) => fromSome(RewardsPaid[addr], zeroRewards);
+  const lookupUserData = (addr) => fromSome(Users[addr], {
+    stake: 0,
+    rewards: zeroRewards,
+  });
+  const userUpdate = (addr, f) => {
+    Users[addr] = f(lookupUserData(addr));
+  };
+
+  const lookupStaked = (addr) => lookupUserData(addr).stake;
+  const lookupRewardsPaid = (addr) => lookupUserData(addr).rewards;
   V.staked.set(lookupStaked);
 
   const checkStartRewards = (i) => {
@@ -101,6 +112,7 @@ export const main = Reach.App(() => {
   const  [totalStaked, remainingRewards, rewardsLastRefreshed, lastAvailableRewards] =
     parallelReduce([0,     startRewards,                start,          zeroRewards])
     .define(() => {
+      const userStakes = () => sumf(Users, (x) => x.stake);
       const lct = lastConsensusTime();
       const totAvailableRewardsAt_i = (when) => (i) => {
         // You might think it's this, but it's not:
@@ -149,12 +161,12 @@ export const main = Reach.App(() => {
     })
     .invariant(               true
       &&   balance(stakeToken) == totalStaked
-      &&          Stakes.sum() == totalStaked
+      &&          userStakes() == totalStaked
       &&             balance() == remainingRewards[0]
       &&       startRewards[0] >= remainingRewards[0]
       && balance(rewardToken1) == remainingRewards[1]
       &&       startRewards[1] >= remainingRewards[1]
-      // TODO:
+      // XXX:
       // && totAvailableRewardsAt(end) <= remainingRewards
       // Not sure about rounding errors
       )
@@ -165,17 +177,19 @@ export const main = Reach.App(() => {
       ((amt, k) => {
         const newEveryoneStaked = totalStaked + amt;
         const newUserStaked = lookupStaked(this) + amt;
-        Stakes[this] = newUserStaked;
         const currentPaid = lookupRewardsPaid(this);
         const mkNewPaid = (i) => {
           const a = availableRewards[i];
           const morePaid = muldiv(a, amt, newEveryoneStaked);
           return currentPaid[i] + morePaid;
         };
-        RewardsPaid[this] = [
-          mkNewPaid(0),
-          mkNewPaid(1),
-        ];
+        Users[this] = {
+          stake: newUserStaked,
+          rewards: [
+            mkNewPaid(0),
+            mkNewPaid(1),
+          ],
+        };
         k(StakeUpdate.fromObject({newUserStaked, newEveryoneStaked}));
         return [newEveryoneStaked, remainingRewards, lct, availableRewards];
       }))
@@ -189,7 +203,6 @@ export const main = Reach.App(() => {
         transfer([[amt, stakeToken]]).to(this);
         const newEveryoneStaked = totalStaked - amt;
         const newUserStaked = oldUserStaked - amt;
-        Stakes[this] = newUserStaked;
         const currentPaid = lookupRewardsPaid(this);
         const lessPaid = (i) => {
           // let's not div by 0
@@ -200,14 +213,17 @@ export const main = Reach.App(() => {
             return muldiv(availableRewards[i], amt, newEveryoneStaked);
           }
         };
-        // TODO: assert things about currentPaid/lessPaid
+        // XXX: assert things about currentPaid/lessPaid
         // If lessPaid < currentPaid, this means the user may be losing out on rewards somehow.
         // This is not great, but we are not going to try to always prevent it from happening.
         const mkNewPaid = (i) => zsub(currentPaid[i], lessPaid(i));
-        RewardsPaid[this] = [
-          mkNewPaid(0),
-          mkNewPaid(1),
-        ];
+        Users[this] = {
+          stake: newUserStaked,
+          rewards: [
+            mkNewPaid(0),
+            mkNewPaid(1),
+          ],
+        };
         assert(newUserStaked <= newEveryoneStaked);
         k(StakeUpdate.fromObject({newUserStaked, newEveryoneStaked}));
         return [newEveryoneStaked, remainingRewards, lct, availableRewards];
@@ -226,10 +242,13 @@ export const main = Reach.App(() => {
         ];
         const paid = lookupRewardsPaid(this);
         const mkNewPaid = (i) => paid[i] + amts[i];
-        RewardsPaid[this] = [
-          mkNewPaid(0),
-          mkNewPaid(1),
-        ];
+        userUpdate(this, (old) => ({
+          ...old,
+          rewards: [
+            mkNewPaid(0),
+            mkNewPaid(1),
+          ],
+        }));
         k(RewardsUpdate.fromObject({userReceived: amts, totalRemaining}));
         const mkAvailableRewards_p = (i) => availableRewards[i] - amts[i];
         const availableRewards_p = [
