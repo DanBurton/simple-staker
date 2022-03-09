@@ -1,0 +1,3006 @@
+#pragma version 6
+// resource: transactions
+int 0
+store 0 // GV_txnCounter :: UInt
+txn ApplicationID
+bz alloc
+byte base64()
+app_global_get
+dup
+int 0
+extract_uint64
+store 1 // GV_currentStep :: UInt
+int 8
+extract_uint64
+store 2 // GV_currentTime :: UInt
+txn OnCompletion
+int OptIn
+==
+bz normal
+txn Sender
+byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+byte base64(AA==)
+swap
+app_local_put
+b checkSize
+normal:
+txna ApplicationArgs 0
+btoi
+preamble:
+dup
+bz publish
+api:
+int 0
+store 4 // GV_argTime :: UInt
+int 1
+store 6 // GV_wasMeth :: Bool
+dup
+int 2648588825
+<
+bnz l0_method_lt_2648588825
+dup
+int 3683553257
+<
+bnz l1_method_lt_3683553257
+dup
+int 3936421307
+<
+bnz l2_method_lt_3936421307
+dup
+int 3986934889
+<
+bnz l3_method_lt_3986934889
+int 3986934889
+==
+assert
+
+  // { remainingRewards
+  // View: remainingRewards()(uint64,uint64)
+  //   ui: 3986934889
+  load 1 // GV_currentStep :: UInt
+  dup
+  int 6
+  <
+  bnz l4_viewStep_lt_6
+  int 6
+  ==
+  assert
+
+    // { remainingRewards_6
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    byte base64(Ag==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 128 16
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // remainingRewards_6 }
+
+  l4_viewStep_lt_6:
+  int 3
+  ==
+  assert
+
+    // { remainingRewards_3
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 128 16
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // remainingRewards_3 }
+
+  // remainingRewards }
+
+l3_method_lt_3986934889:
+int 3936421307
+==
+assert
+
+  // { staked
+  // View: staked(address)uint64
+  //   ui: 3936421307
+  load 1 // GV_currentStep :: UInt
+  dup
+  int 6
+  <
+  bnz l5_viewStep_lt_6
+  int 6
+  ==
+  assert
+
+    // { staked_6
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)
+    // resource: accounts
+    txna ApplicationArgs 1
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l7_mapLoadDo
+    l8_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l6_mapLoadK
+    l7_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l6_mapLoadK:
+    dup
+    store 255 // fromSome object
+    extract 1 24
+    load 255 // fromSome object
+    int 0
+    getbyte
+    select
+    extract 16 8
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // staked_6 }
+
+  l5_viewStep_lt_6:
+  int 3
+  ==
+  assert
+
+    // { staked_3
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)
+    // resource: accounts
+    txna ApplicationArgs 1
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l10_mapLoadDo
+    l11_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l9_mapLoadK
+    l10_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l9_mapLoadK:
+    dup
+    store 255 // fromSome object
+    extract 1 24
+    load 255 // fromSome object
+    int 0
+    getbyte
+    select
+    extract 16 8
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // staked_3 }
+
+  // staked }
+
+l2_method_lt_3936421307:
+int 3683553257
+==
+assert
+
+  // { opts
+  // View: opts()(uint64,uint64,(uint64,uint64),uint64)
+  //   ui: 3683553257
+  load 1 // GV_currentStep :: UInt
+  dup
+  int 3
+  <
+  bnz l12_viewStep_lt_3
+  dup
+  int 6
+  <
+  bnz l13_viewStep_lt_6
+  int 6
+  ==
+  assert
+
+    // { opts_6
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    byte base64(Ag==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 32 40
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // opts_6 }
+
+  l13_viewStep_lt_6:
+  int 3
+  ==
+  assert
+
+    // { opts_3
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 32 40
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // opts_3 }
+
+  l12_viewStep_lt_3:
+  int 1
+  ==
+  assert
+
+    // { opts_1
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 32 40
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // opts_1 }
+
+  // opts }
+
+l1_method_lt_3683553257:
+dup
+int 3585561840
+<
+bnz l14_method_lt_3585561840
+int 3585561840
+==
+assert
+
+  // { Any_halt
+  // API: Any_halt()byte[0]
+  //  ui: 3585561840
+  byte base64()
+  store 255 // v5666 :: Tuple()
+  byte base64(AA==)
+  load 255 // v5666 :: Tuple()
+  concat
+  store 5 // GV_argMsg :: Null
+  b publish3
+  // Any_halt }
+
+l14_method_lt_3585561840:
+int 2648588825
+==
+assert
+
+  // { Staker_stake
+  // API: Staker_stake(uint64)(uint64,uint64)
+  //  ui: 2648588825
+  txna ApplicationArgs 1
+  store 255 // v5667 :: Tuple(UInt)
+  byte base64(AQ==)
+  load 255 // v5667 :: Tuple(UInt)
+  concat
+  store 5 // GV_argMsg :: Null
+  b publish4
+  // Staker_stake }
+
+l0_method_lt_2648588825:
+dup
+int 1796109140
+<
+bnz l15_method_lt_1796109140
+dup
+int 2254822102
+<
+bnz l16_method_lt_2254822102
+dup
+int 2541422102
+<
+bnz l17_method_lt_2541422102
+int 2541422102
+==
+assert
+
+  // { totalStaked
+  // View: totalStaked()uint64
+  //   ui: 2541422102
+  load 1 // GV_currentStep :: UInt
+  dup
+  int 6
+  <
+  bnz l18_viewStep_lt_6
+  int 6
+  ==
+  assert
+
+    // { totalStaked_6
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    byte base64(Ag==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 152 8
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // totalStaked_6 }
+
+  l18_viewStep_lt_6:
+  int 3
+  ==
+  assert
+
+    // { totalStaked_3
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 152 8
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // totalStaked_3 }
+
+  // totalStaked }
+
+l17_method_lt_2541422102:
+int 2254822102
+==
+assert
+
+  // { rewardsAvailableAt
+  // View: rewardsAvailableAt(address,uint64)(uint64,uint64)
+  //   ui: 2254822102
+  load 1 // GV_currentStep :: UInt
+  dup
+  int 6
+  <
+  bnz l19_viewStep_lt_6
+  int 6
+  ==
+  assert
+
+    // { rewardsAvailableAt_6
+    txna ApplicationArgs 2
+    btoi
+    store 255 // v1656 :: UInt
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    byte base64(Ag==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    int 104
+    extract_uint64
+    store 254 // x/1469 :: UInt
+    load 3 // GV_svs :: Null
+    int 144
+    extract_uint64
+    store 253 // rewardsLastRefreshed/1489 :: UInt
+    load 3 // GV_svs :: Null
+    int 152
+    extract_uint64
+    store 252 // totalStaked/1490 :: UInt
+    load 3 // GV_svs :: Null
+    int 235
+    extract_uint64
+    store 251 // y/1635 :: UInt
+    load 3 // GV_svs :: Null
+    int 243
+    extract_uint64
+    store 250 // x/1637 :: UInt
+    load 3 // GV_svs :: Null
+    int 259
+    int 8
+    extract3
+    btoi
+    store 249 // y/1649 :: UInt
+    load 3 // GV_svs :: Null
+    int 267
+    int 8
+    extract3
+    btoi
+    store 248 // x/1651 :: UInt
+    load 3 // GV_svs :: Null
+    extract 112 16
+    byte base64(AAAAAAAAAAA=)
+    concat
+    // resource: accounts
+    txna ApplicationArgs 1
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l21_mapLoadDo
+    l22_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l20_mapLoadK
+    l21_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l20_mapLoadK:
+    dup
+    store 246 // fromSome object
+    extract 1 24
+    load 246 // fromSome object
+    int 0
+    getbyte
+    select
+    dup
+    store 247 // v1660 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    int 16
+    extract_uint64
+    store 246 // v1661 :: UInt
+    load 247 // v1660 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    extract 0 16
+    dup
+    store 245 // v1666 :: Tuple(UInt, UInt)
+    int 0
+    extract_uint64
+    store 244 // v1667 :: UInt
+    load 255 // v1656 :: UInt
+    load 254 // x/1469 :: UInt
+    dup
+    load 255 // v1656 :: UInt
+    <=
+    select
+    store 243 // v1671 :: UInt
+    load 253 // rewardsLastRefreshed/1489 :: UInt
+    load 243 // v1671 :: UInt
+    >=
+    dup
+    store 241 // v1673 :: Bool
+    bz l23_localIfF
+    int 0
+    store 242 // v1672 :: UInt
+    b l24_localIfK
+    l23_localIfF:
+    load 243 // v1671 :: UInt
+    load 253 // rewardsLastRefreshed/1489 :: UInt
+    -
+    store 242 // v1672 :: UInt
+    l24_localIfK:
+    load 3 // GV_svs :: Null
+    int 218
+    extract_uint64
+    load 242 // v1672 :: UInt
+    load 3 // GV_svs :: Null
+    int 88
+    extract_uint64
+    *
+    +
+    store 240 // v1677 :: UInt
+    load 251 // y/1635 :: UInt
+    load 240 // v1677 :: UInt
+    dup
+    load 251 // y/1635 :: UInt
+    <=
+    select
+    store 239 // v1680 :: UInt
+    load 252 // totalStaked/1490 :: UInt
+    int 0
+    ==
+    dup
+    store 237 // v1684 :: Bool
+    bz l25_localIfF
+    load 239 // v1680 :: UInt
+    store 238 // v1683 :: UInt
+    b l26_localIfK
+    l25_localIfF:
+    load 239 // v1680 :: UInt
+    load 246 // v1661 :: UInt
+    mulw
+    load 252 // totalStaked/1490 :: UInt
+    divw
+    store 238 // v1683 :: UInt
+    l26_localIfK:
+    load 244 // v1667 :: UInt
+    load 238 // v1683 :: UInt
+    >=
+    bz l27_localIfF
+    int 0
+    store 236 // v1686 :: UInt
+    b l28_localIfK
+    l27_localIfF:
+    load 238 // v1683 :: UInt
+    load 244 // v1667 :: UInt
+    -
+    store 236 // v1686 :: UInt
+    l28_localIfK:
+    load 245 // v1666 :: Tuple(UInt, UInt)
+    int 8
+    extract_uint64
+    store 235 // v1702 :: UInt
+    load 241 // v1673 :: Bool
+    bz l29_localIfF
+    int 0
+    store 234 // v1707 :: UInt
+    b l30_localIfK
+    l29_localIfF:
+    load 243 // v1671 :: UInt
+    load 253 // rewardsLastRefreshed/1489 :: UInt
+    -
+    store 234 // v1707 :: UInt
+    l30_localIfK:
+    load 3 // GV_svs :: Null
+    int 251
+    extract_uint64
+    load 234 // v1707 :: UInt
+    load 3 // GV_svs :: Null
+    int 96
+    extract_uint64
+    *
+    +
+    store 233 // v1712 :: UInt
+    load 249 // y/1649 :: UInt
+    load 233 // v1712 :: UInt
+    dup
+    load 249 // y/1649 :: UInt
+    <=
+    select
+    store 232 // v1715 :: UInt
+    load 237 // v1684 :: Bool
+    bz l31_localIfF
+    load 232 // v1715 :: UInt
+    store 231 // v1718 :: UInt
+    b l32_localIfK
+    l31_localIfF:
+    load 232 // v1715 :: UInt
+    load 246 // v1661 :: UInt
+    mulw
+    load 252 // totalStaked/1490 :: UInt
+    divw
+    store 231 // v1718 :: UInt
+    l32_localIfK:
+    load 235 // v1702 :: UInt
+    load 231 // v1718 :: UInt
+    >=
+    bz l33_localIfF
+    int 0
+    store 230 // v1721 :: UInt
+    b l34_localIfK
+    l33_localIfF:
+    load 231 // v1718 :: UInt
+    load 235 // v1702 :: UInt
+    -
+    store 230 // v1721 :: UInt
+    l34_localIfK:
+    load 250 // x/1637 :: UInt
+    load 236 // v1686 :: UInt
+    dup
+    load 250 // x/1637 :: UInt
+    <=
+    select
+    itob
+    load 248 // x/1651 :: UInt
+    load 230 // v1721 :: UInt
+    dup
+    load 248 // x/1651 :: UInt
+    <=
+    select
+    itob
+    concat
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // rewardsAvailableAt_6 }
+
+  l19_viewStep_lt_6:
+  int 3
+  ==
+  assert
+
+    // { rewardsAvailableAt_3
+    txna ApplicationArgs 2
+    btoi
+    store 255 // v2622 :: UInt
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    int 104
+    extract_uint64
+    store 254 // x/1469 :: UInt
+    load 3 // GV_svs :: Null
+    int 144
+    extract_uint64
+    store 253 // rewardsLastRefreshed/1489 :: UInt
+    load 3 // GV_svs :: Null
+    int 152
+    extract_uint64
+    store 252 // totalStaked/1490 :: UInt
+    load 3 // GV_svs :: Null
+    int 210
+    extract_uint64
+    store 251 // y/2601 :: UInt
+    load 3 // GV_svs :: Null
+    int 218
+    extract_uint64
+    store 250 // y/2603 :: UInt
+    load 3 // GV_svs :: Null
+    int 234
+    extract_uint64
+    store 249 // y/2615 :: UInt
+    load 3 // GV_svs :: Null
+    int 242
+    extract_uint64
+    store 248 // y/2617 :: UInt
+    load 3 // GV_svs :: Null
+    extract 112 16
+    byte base64(AAAAAAAAAAA=)
+    concat
+    // resource: accounts
+    txna ApplicationArgs 1
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l36_mapLoadDo
+    l37_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l35_mapLoadK
+    l36_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l35_mapLoadK:
+    dup
+    store 246 // fromSome object
+    extract 1 24
+    load 246 // fromSome object
+    int 0
+    getbyte
+    select
+    dup
+    store 247 // v2626 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    int 16
+    extract_uint64
+    store 246 // v2627 :: UInt
+    load 247 // v2626 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    extract 0 16
+    dup
+    store 245 // v2632 :: Tuple(UInt, UInt)
+    int 0
+    extract_uint64
+    store 244 // v2633 :: UInt
+    load 255 // v2622 :: UInt
+    load 254 // x/1469 :: UInt
+    dup
+    load 255 // v2622 :: UInt
+    <=
+    select
+    store 243 // v2637 :: UInt
+    load 253 // rewardsLastRefreshed/1489 :: UInt
+    load 243 // v2637 :: UInt
+    >=
+    dup
+    store 241 // v2639 :: Bool
+    bz l38_localIfF
+    int 0
+    store 242 // v2638 :: UInt
+    b l39_localIfK
+    l38_localIfF:
+    load 243 // v2637 :: UInt
+    load 253 // rewardsLastRefreshed/1489 :: UInt
+    -
+    store 242 // v2638 :: UInt
+    l39_localIfK:
+    load 3 // GV_svs :: Null
+    int 202
+    extract_uint64
+    load 242 // v2638 :: UInt
+    load 3 // GV_svs :: Null
+    int 88
+    extract_uint64
+    *
+    +
+    store 240 // v2643 :: UInt
+    load 251 // y/2601 :: UInt
+    load 240 // v2643 :: UInt
+    dup
+    load 251 // y/2601 :: UInt
+    <=
+    select
+    store 239 // v2646 :: UInt
+    load 252 // totalStaked/1490 :: UInt
+    int 0
+    ==
+    dup
+    store 237 // v2650 :: Bool
+    bz l40_localIfF
+    load 239 // v2646 :: UInt
+    store 238 // v2649 :: UInt
+    b l41_localIfK
+    l40_localIfF:
+    load 239 // v2646 :: UInt
+    load 246 // v2627 :: UInt
+    mulw
+    load 252 // totalStaked/1490 :: UInt
+    divw
+    store 238 // v2649 :: UInt
+    l41_localIfK:
+    load 244 // v2633 :: UInt
+    load 238 // v2649 :: UInt
+    >=
+    bz l42_localIfF
+    int 0
+    store 236 // v2652 :: UInt
+    b l43_localIfK
+    l42_localIfF:
+    load 238 // v2649 :: UInt
+    load 244 // v2633 :: UInt
+    -
+    store 236 // v2652 :: UInt
+    l43_localIfK:
+    load 245 // v2632 :: Tuple(UInt, UInt)
+    int 8
+    extract_uint64
+    store 235 // v2668 :: UInt
+    load 241 // v2639 :: Bool
+    bz l44_localIfF
+    int 0
+    store 234 // v2673 :: UInt
+    b l45_localIfK
+    l44_localIfF:
+    load 243 // v2637 :: UInt
+    load 253 // rewardsLastRefreshed/1489 :: UInt
+    -
+    store 234 // v2673 :: UInt
+    l45_localIfK:
+    load 3 // GV_svs :: Null
+    int 226
+    extract_uint64
+    load 234 // v2673 :: UInt
+    load 3 // GV_svs :: Null
+    int 96
+    extract_uint64
+    *
+    +
+    store 233 // v2678 :: UInt
+    load 249 // y/2615 :: UInt
+    load 233 // v2678 :: UInt
+    dup
+    load 249 // y/2615 :: UInt
+    <=
+    select
+    store 232 // v2681 :: UInt
+    load 237 // v2650 :: Bool
+    bz l46_localIfF
+    load 232 // v2681 :: UInt
+    store 231 // v2684 :: UInt
+    b l47_localIfK
+    l46_localIfF:
+    load 232 // v2681 :: UInt
+    load 246 // v2627 :: UInt
+    mulw
+    load 252 // totalStaked/1490 :: UInt
+    divw
+    store 231 // v2684 :: UInt
+    l47_localIfK:
+    load 235 // v2668 :: UInt
+    load 231 // v2684 :: UInt
+    >=
+    bz l48_localIfF
+    int 0
+    store 230 // v2687 :: UInt
+    b l49_localIfK
+    l48_localIfF:
+    load 231 // v2684 :: UInt
+    load 235 // v2668 :: UInt
+    -
+    store 230 // v2687 :: UInt
+    l49_localIfK:
+    load 250 // y/2603 :: UInt
+    load 236 // v2652 :: UInt
+    dup
+    load 250 // y/2603 :: UInt
+    <=
+    select
+    itob
+    load 248 // y/2617 :: UInt
+    load 230 // v2687 :: UInt
+    dup
+    load 248 // y/2617 :: UInt
+    <=
+    select
+    itob
+    concat
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // rewardsAvailableAt_3 }
+
+  // rewardsAvailableAt }
+
+l16_method_lt_2254822102:
+int 1796109140
+==
+assert
+
+  // { Staker_withdraw
+  // API: Staker_withdraw(uint64)(uint64,uint64)
+  //  ui: 1796109140
+  txna ApplicationArgs 1
+  store 255 // v5672 :: Tuple(UInt)
+  byte base64(Ag==)
+  load 255 // v5672 :: Tuple(UInt)
+  concat
+  store 5 // GV_argMsg :: Null
+  b publish4
+  // Staker_withdraw }
+
+l15_method_lt_1796109140:
+dup
+int 1660521493
+<
+bnz l50_method_lt_1660521493
+int 1660521493
+==
+assert
+
+  // { Staker_harvest
+  // API: Staker_harvest()((uint64,uint64),(uint64,uint64))
+  //  ui: 1660521493
+  byte base64()
+  store 255 // v5673 :: Tuple()
+  byte base64(AA==)
+  load 255 // v5673 :: Tuple()
+  concat
+  byte base64(AAAAAAAAAAA=)
+  concat
+  store 5 // GV_argMsg :: Null
+  b publish4
+  // Staker_harvest }
+
+l50_method_lt_1660521493:
+int 890721542
+==
+assert
+
+  // { end
+  // View: end()uint64
+  //   ui: 890721542
+  load 1 // GV_currentStep :: UInt
+  dup
+  int 6
+  <
+  bnz l51_viewStep_lt_6
+  int 6
+  ==
+  assert
+
+    // { end_6
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    byte base64(Ag==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 104 8
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // end_6 }
+
+  l51_viewStep_lt_6:
+  int 3
+  ==
+  assert
+
+    // { end_3
+    byte base64(AA==)
+    app_global_get
+    byte base64(AQ==)
+    app_global_get
+    concat
+    dup
+    store 3 // GV_svs :: Null
+    extract 104 8
+    store 7 // GV_apiRet :: Null
+    b apiReturn
+    // end_3 }
+
+  // end }
+
+publish:
+txna ApplicationArgs 1
+btoi
+txna ApplicationArgs 2
+btoi
+store 4 // GV_argTime :: UInt
+txna ApplicationArgs 3
+store 5 // GV_argMsg :: Null
+dup
+int 2
+<
+bnz l52_publish_lt_2
+dup
+int 3
+<
+bnz l53_publish_lt_3
+dup
+int 4
+<
+bnz l54_publish_lt_4
+int 4
+==
+assert
+
+  // { publish4
+  publish4:
+  // check step
+  int 6
+  load 1 // GV_currentStep :: UInt
+  ==
+  assert
+  // check time
+  load 4 // GV_argTime :: UInt
+  dup
+  int 0
+  ==
+  swap
+  load 2 // GV_currentTime :: UInt
+  ==
+  ||
+  assert
+  byte base64(AA==)
+  app_global_get
+  byte base64(AQ==)
+  app_global_get
+  concat
+  byte base64(Ag==)
+  app_global_get
+  concat
+  dup
+  store 3 // GV_svs :: Null
+  extract 0 32
+  store 255 // Deployer/1424 :: Address
+  load 3 // GV_svs :: Null
+  extract 32 40
+  store 254 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  load 3 // GV_svs :: Null
+  int 72
+  extract_uint64
+  store 253 // rewardToken1/1426 :: Token
+  load 3 // GV_svs :: Null
+  int 80
+  extract_uint64
+  store 252 // stakeToken/1427 :: Token
+  load 3 // GV_svs :: Null
+  int 88
+  extract_uint64
+  store 251 // v1448 :: UInt
+  load 3 // GV_svs :: Null
+  int 96
+  extract_uint64
+  store 250 // v1450 :: UInt
+  load 3 // GV_svs :: Null
+  int 104
+  extract_uint64
+  store 249 // x/1469 :: UInt
+  load 3 // GV_svs :: Null
+  extract 112 16
+  store 248 // v1485 :: Tuple(UInt, UInt)
+  load 3 // GV_svs :: Null
+  extract 128 16
+  store 247 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  load 3 // GV_svs :: Null
+  int 144
+  extract_uint64
+  store 246 // rewardsLastRefreshed/1489 :: UInt
+  load 3 // GV_svs :: Null
+  int 152
+  extract_uint64
+  store 245 // totalStaked/1490 :: UInt
+  load 3 // GV_svs :: Null
+  int 160
+  extract_uint64
+  store 244 // thisConsensusTime/1491 :: UInt
+  load 3 // GV_svs :: Null
+  int 168
+  extract_uint64
+  store 243 // lastConsensusTime/1492 :: UInt
+  load 3 // GV_svs :: Null
+  extract 176 34
+  store 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+  load 3 // GV_svs :: Null
+  int 210
+  extract_uint64
+  store 241 // netBalance/1498 :: UInt
+  load 3 // GV_svs :: Null
+  int 226
+  extract_uint64
+  store 240 // x/1628 :: UInt
+  load 3 // GV_svs :: Null
+  extract 234 1
+  btoi
+  store 239 // v1630 :: Bool
+  load 3 // GV_svs :: Null
+  int 235
+  extract_uint64
+  store 238 // y/1635 :: UInt
+  load 3 // GV_svs :: Null
+  int 243
+  extract_uint64
+  store 237 // x/1637 :: UInt
+  load 3 // GV_svs :: Null
+  int 259
+  int 8
+  extract3
+  btoi
+  store 236 // y/1649 :: UInt
+  load 3 // GV_svs :: Null
+  int 267
+  int 8
+  extract3
+  btoi
+  store 235 // x/1651 :: UInt
+  load 3 // GV_svs :: Null
+  int 275
+  int 16
+  extract3
+  store 234 // v1654 :: Tuple(UInt, UInt)
+  load 5 // GV_argMsg :: Null
+  store 233 // .fork576.msg/1790 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
+  byte base64(1Y4dqw==)
+  load 233 // .fork576.msg/1790 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
+  concat
+  log // up to 13 bytes
+  load 233 // .fork576.msg/1790 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
+  int 0
+  getbyte
+  dup
+  int 1
+  <
+  bnz l55_Switch_lt_1
+  dup
+  int 2
+  <
+  bnz l56_Switch_lt_2
+  int 2
+  ==
+  assert
+
+    // { l57_Switch_Staker_withdraw0_576
+    l57_Switch_Staker_withdraw0_576:
+    load 233 // .fork576.msg/1790 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
+    extract 1 8
+    store 232 // data_id/2325 :: Tuple(UInt)
+    // ^ CheckPay
+    // at ./index.rsh:120:19:dot
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 17 17
+    store 231 // tokInfo/2361 :: Tuple(UInt, UInt, Bool)
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    load 231 // tokInfo/2361 :: Tuple(UInt, UInt, Bool)
+    extract 0 8
+    load 231 // tokInfo/2361 :: Tuple(UInt, UInt, Bool)
+    extract 8 8
+    concat
+    load 231 // tokInfo/2361 :: Tuple(UInt, UInt, Bool)
+    extract 16 1
+    concat
+    concat
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    pop
+    store 230 // tokInfos'/2369 :: Array(Tuple(UInt, UInt, Bool), 2)
+    // ^ CheckPay
+    // at ./index.rsh:120:19:dot
+    load 232 // data_id/2325 :: Tuple(UInt)
+    btoi
+    store 229 // y/2538 :: UInt
+    load 248 // v1485 :: Tuple(UInt, UInt)
+    byte base64(AAAAAAAAAAA=)
+    concat
+    txn Sender
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l59_mapLoadDo
+    l60_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l58_mapLoadK
+    l59_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l58_mapLoadK:
+    dup
+    store 227 // fromSome object
+    extract 1 24
+    load 227 // fromSome object
+    int 0
+    getbyte
+    select
+    dup
+    store 228 // v2542 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    int 16
+    extract_uint64
+    store 227 // oldUserStaked/2543 :: UInt
+    load 229 // y/2538 :: UInt
+    load 227 // oldUserStaked/2543 :: UInt
+    <=
+    assert
+    // ^ Claim
+    // at ./index.rsh:196:16:application
+    // at ./index.rsh:193:7:application call to [unknown function] (defined at: ./index.rsh:193:7:function exp)
+    load 230 // tokInfos'/2369 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 17 17
+    store 226 // tokInfo/2546 :: Tuple(UInt, UInt, Bool)
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 229 // y/2538 :: UInt
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      txn Sender
+      itxn_field AssetReceiver
+      // resource: assets
+      load 252 // stakeToken/1427 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+    load 245 // totalStaked/1490 :: UInt
+    load 229 // y/2538 :: UInt
+    -
+    store 225 // totalStaked/2558 :: UInt
+    load 227 // oldUserStaked/2543 :: UInt
+    load 229 // y/2538 :: UInt
+    -
+    store 224 // newUserStaked/2559 :: UInt
+    load 228 // v2542 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    extract 0 16
+    dup
+    store 223 // currentPaid/2564 :: Tuple(UInt, UInt)
+    int 0
+    extract_uint64
+    store 222 // x/2565 :: UInt
+    load 225 // totalStaked/2558 :: UInt
+    int 0
+    ==
+    dup
+    store 220 // v2567 :: Bool
+    bz l61_localIfF
+    load 237 // x/1637 :: UInt
+    store 221 // y/2566 :: UInt
+    b l62_localIfK
+    l61_localIfF:
+    load 237 // x/1637 :: UInt
+    load 229 // y/2538 :: UInt
+    mulw
+    load 225 // totalStaked/2558 :: UInt
+    divw
+    store 221 // y/2566 :: UInt
+    l62_localIfK:
+    load 221 // y/2566 :: UInt
+    load 222 // x/2565 :: UInt
+    >=
+    bz l63_localIfF
+    int 0
+    store 219 // v2569 :: UInt
+    b l64_localIfK
+    l63_localIfF:
+    load 222 // x/2565 :: UInt
+    load 221 // y/2566 :: UInt
+    -
+    store 219 // v2569 :: UInt
+    l64_localIfK:
+    load 223 // currentPaid/2564 :: Tuple(UInt, UInt)
+    int 8
+    extract_uint64
+    store 218 // x/2572 :: UInt
+    load 220 // v2567 :: Bool
+    bz l65_localIfF
+    load 235 // x/1651 :: UInt
+    store 217 // y/2573 :: UInt
+    b l66_localIfK
+    l65_localIfF:
+    load 235 // x/1651 :: UInt
+    load 229 // y/2538 :: UInt
+    mulw
+    load 225 // totalStaked/2558 :: UInt
+    divw
+    store 217 // y/2573 :: UInt
+    l66_localIfK:
+    load 217 // y/2573 :: UInt
+    load 218 // x/2572 :: UInt
+    >=
+    bz l67_localIfF
+    int 0
+    store 216 // v2576 :: UInt
+    b l68_localIfK
+    l67_localIfF:
+    load 218 // x/2572 :: UInt
+    load 217 // y/2573 :: UInt
+    -
+    store 216 // v2576 :: UInt
+    l68_localIfK:
+    txn Sender
+    byte base64(AQ==)
+    load 219 // v2569 :: UInt
+    itob
+    load 216 // v2576 :: UInt
+    itob
+    concat
+    load 224 // newUserStaked/2559 :: UInt
+    itob
+    concat
+    concat
+    byte base64(AA==)
+    swap
+    app_local_put
+    byte base64(AAAAAAAAChY=)
+    load 224 // newUserStaked/2559 :: UInt
+    itob
+    load 225 // totalStaked/2558 :: UInt
+    itob
+    concat
+    concat
+    log // up to 24 bytes
+    load 224 // newUserStaked/2559 :: UInt
+    itob
+    load 225 // totalStaked/2558 :: UInt
+    itob
+    concat
+    store 7 // GV_apiRet :: Null
+    load 255 // Deployer/1424 :: Address
+    load 254 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+    load 253 // rewardToken1/1426 :: Token
+    load 252 // stakeToken/1427 :: Token
+    load 251 // v1448 :: UInt
+    load 250 // v1450 :: UInt
+    load 249 // x/1469 :: UInt
+    load 248 // v1485 :: Tuple(UInt, UInt)
+    load 234 // v1654 :: Tuple(UInt, UInt)
+    load 247 // remainingRewards/1488 :: Tuple(UInt, UInt)
+    load 243 // lastConsensusTime/1492 :: UInt
+    load 225 // totalStaked/2558 :: UInt
+    global Round
+    load 244 // thisConsensusTime/1491 :: UInt
+    load 230 // tokInfos'/2369 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    load 226 // tokInfo/2546 :: Tuple(UInt, UInt, Bool)
+    int 0
+    extract_uint64
+    load 229 // y/2538 :: UInt
+    -
+    itob
+    load 226 // tokInfo/2546 :: Tuple(UInt, UInt, Bool)
+    extract 8 8
+    concat
+    load 226 // tokInfo/2546 :: Tuple(UInt, UInt, Bool)
+    extract 16 1
+    concat
+    concat
+    load 230 // tokInfos'/2369 :: Array(Tuple(UInt, UInt, Bool), 2)
+    pop
+    load 241 // netBalance/1498 :: UInt
+    b loopBody2
+    // l57_Switch_Staker_withdraw0_576 }
+
+  l56_Switch_lt_2:
+  pop
+
+    // { l69_Switch_Staker_stake0_576
+    l69_Switch_Staker_stake0_576:
+    load 233 // .fork576.msg/1790 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
+    extract 1 8
+    dup
+    store 232 // data_id/2059 :: Tuple(UInt)
+    btoi
+    store 231 // amt/2071 :: UInt
+    // ^ CheckPay
+    // at ./index.rsh:120:19:dot
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 17 17
+    store 230 // tokInfo/2095 :: Tuple(UInt, UInt, Bool)
+
+      // { checkTxn
+      // resource: transactions
+      load 0 // GV_txnCounter :: UInt
+      dup
+      int 1
+      +
+      store 0 // GV_txnCounter :: UInt
+      load 231 // amt/2071 :: UInt
+      dig 1
+      gtxns AssetAmount
+      ==
+      assert
+      load 252 // stakeToken/1427 :: Token
+      dig 1
+      gtxns XferAsset
+      ==
+      assert
+      int axfer
+      dig 1
+      gtxns TypeEnum
+      ==
+      assert
+      global CurrentApplicationAddress
+      dig 1
+      gtxns AssetReceiver
+      ==
+      assert
+      pop
+      // checkTxn }
+
+    // ^ CheckPay
+    // at ./index.rsh:120:19:dot
+    load 245 // totalStaked/1490 :: UInt
+    load 231 // amt/2071 :: UInt
+    +
+    store 229 // totalStaked/2238 :: UInt
+    load 248 // v1485 :: Tuple(UInt, UInt)
+    byte base64(AAAAAAAAAAA=)
+    concat
+    txn Sender
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l71_mapLoadDo
+    l72_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l70_mapLoadK
+    l71_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l70_mapLoadK:
+    dup
+    store 227 // fromSome object
+    extract 1 24
+    load 227 // fromSome object
+    int 0
+    getbyte
+    select
+    dup
+    store 228 // v2242 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    int 16
+    extract_uint64
+    load 231 // amt/2071 :: UInt
+    +
+    store 227 // newUserStaked/2244 :: UInt
+    load 228 // v2242 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    extract 0 16
+    store 226 // currentPaid/2249 :: Tuple(UInt, UInt)
+    load 229 // totalStaked/2238 :: UInt
+    int 0
+    ==
+    dup
+    store 224 // v2251 :: Bool
+    bz l73_localIfF
+    load 237 // x/1637 :: UInt
+    store 225 // morePaid/2250 :: UInt
+    b l74_localIfK
+    l73_localIfF:
+    load 237 // x/1637 :: UInt
+    load 231 // amt/2071 :: UInt
+    mulw
+    load 229 // totalStaked/2238 :: UInt
+    divw
+    store 225 // morePaid/2250 :: UInt
+    l74_localIfK:
+    load 224 // v2251 :: Bool
+    bz l75_localIfF
+    load 235 // x/1651 :: UInt
+    store 223 // morePaid/2255 :: UInt
+    b l76_localIfK
+    l75_localIfF:
+    load 235 // x/1651 :: UInt
+    load 231 // amt/2071 :: UInt
+    mulw
+    load 229 // totalStaked/2238 :: UInt
+    divw
+    store 223 // morePaid/2255 :: UInt
+    l76_localIfK:
+    txn Sender
+    byte base64(AQ==)
+    load 226 // currentPaid/2249 :: Tuple(UInt, UInt)
+    int 0
+    extract_uint64
+    load 225 // morePaid/2250 :: UInt
+    +
+    itob
+    load 226 // currentPaid/2249 :: Tuple(UInt, UInt)
+    int 8
+    extract_uint64
+    load 223 // morePaid/2255 :: UInt
+    +
+    itob
+    concat
+    load 227 // newUserStaked/2244 :: UInt
+    itob
+    concat
+    concat
+    byte base64(AA==)
+    swap
+    app_local_put
+    byte base64(AAAAAAAACNY=)
+    load 227 // newUserStaked/2244 :: UInt
+    itob
+    load 229 // totalStaked/2238 :: UInt
+    itob
+    concat
+    concat
+    log // up to 24 bytes
+    load 227 // newUserStaked/2244 :: UInt
+    itob
+    load 229 // totalStaked/2238 :: UInt
+    itob
+    concat
+    store 7 // GV_apiRet :: Null
+    load 255 // Deployer/1424 :: Address
+    load 254 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+    load 253 // rewardToken1/1426 :: Token
+    load 252 // stakeToken/1427 :: Token
+    load 251 // v1448 :: UInt
+    load 250 // v1450 :: UInt
+    load 249 // x/1469 :: UInt
+    load 248 // v1485 :: Tuple(UInt, UInt)
+    load 234 // v1654 :: Tuple(UInt, UInt)
+    load 247 // remainingRewards/1488 :: Tuple(UInt, UInt)
+    load 243 // lastConsensusTime/1492 :: UInt
+    load 229 // totalStaked/2238 :: UInt
+    global Round
+    load 244 // thisConsensusTime/1491 :: UInt
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    load 230 // tokInfo/2095 :: Tuple(UInt, UInt, Bool)
+    int 0
+    extract_uint64
+    load 231 // amt/2071 :: UInt
+    +
+    itob
+    load 230 // tokInfo/2095 :: Tuple(UInt, UInt, Bool)
+    extract 8 8
+    concat
+    load 230 // tokInfo/2095 :: Tuple(UInt, UInt, Bool)
+    extract 16 1
+    concat
+    concat
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    pop
+    load 241 // netBalance/1498 :: UInt
+    b loopBody2
+    // l69_Switch_Staker_stake0_576 }
+
+  l55_Switch_lt_1:
+  pop
+
+    // { l77_Switch_Staker_harvest0_576
+    l77_Switch_Staker_harvest0_576:
+    // ^ CheckPay
+    // at ./index.rsh:120:19:dot
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 17 17
+    store 232 // tokInfo/1829 :: Tuple(UInt, UInt, Bool)
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    load 232 // tokInfo/1829 :: Tuple(UInt, UInt, Bool)
+    extract 0 8
+    load 232 // tokInfo/1829 :: Tuple(UInt, UInt, Bool)
+    extract 8 8
+    concat
+    load 232 // tokInfo/1829 :: Tuple(UInt, UInt, Bool)
+    extract 16 1
+    concat
+    concat
+    load 242 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    pop
+    store 231 // tokInfos'/1837 :: Array(Tuple(UInt, UInt, Bool), 2)
+    // ^ CheckPay
+    // at ./index.rsh:120:19:dot
+    load 248 // v1485 :: Tuple(UInt, UInt)
+    byte base64(AAAAAAAAAAA=)
+    concat
+    txn Sender
+    dup
+    txn ApplicationID
+    app_opted_in
+    bnz l79_mapLoadDo
+    l80_mapLoadDef:
+    pop
+    byte base64(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==)
+    b l78_mapLoadK
+    l79_mapLoadDo:
+    byte base64(AA==)
+    app_local_get
+    l78_mapLoadK:
+    dup
+    store 229 // fromSome object
+    extract 1 24
+    load 229 // fromSome object
+    int 0
+    getbyte
+    select
+    dup
+    store 230 // v1842 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    int 16
+    extract_uint64
+    store 229 // y/1843 :: UInt
+    load 230 // v1842 :: Object({"rewards": Tuple(UInt, UInt), "stake": UInt})
+    extract 0 16
+    dup
+    store 228 // v1848 :: Tuple(UInt, UInt)
+    int 0
+    extract_uint64
+    store 227 // y/1849 :: UInt
+    load 239 // v1630 :: Bool
+    bz l81_localIfF
+    int 0
+    store 226 // v1854 :: UInt
+    b l82_localIfK
+    l81_localIfF:
+    load 240 // x/1628 :: UInt
+    load 246 // rewardsLastRefreshed/1489 :: UInt
+    -
+    store 226 // v1854 :: UInt
+    l82_localIfK:
+    load 3 // GV_svs :: Null
+    int 218
+    extract_uint64
+    load 226 // v1854 :: UInt
+    load 251 // v1448 :: UInt
+    *
+    +
+    store 225 // x/1859 :: UInt
+    load 238 // y/1635 :: UInt
+    load 225 // x/1859 :: UInt
+    dup
+    load 238 // y/1635 :: UInt
+    <=
+    select
+    store 224 // x/1862 :: UInt
+    load 245 // totalStaked/1490 :: UInt
+    int 0
+    ==
+    dup
+    store 222 // v1866 :: Bool
+    bz l83_localIfF
+    load 224 // x/1862 :: UInt
+    store 223 // x/1865 :: UInt
+    b l84_localIfK
+    l83_localIfF:
+    load 224 // x/1862 :: UInt
+    load 229 // y/1843 :: UInt
+    mulw
+    load 245 // totalStaked/1490 :: UInt
+    divw
+    store 223 // x/1865 :: UInt
+    l84_localIfK:
+    load 227 // y/1849 :: UInt
+    load 223 // x/1865 :: UInt
+    >=
+    bz l85_localIfF
+    int 0
+    store 221 // x/1868 :: UInt
+    b l86_localIfK
+    l85_localIfF:
+    load 223 // x/1865 :: UInt
+    load 227 // y/1849 :: UInt
+    -
+    store 221 // x/1868 :: UInt
+    l86_localIfK:
+    load 237 // x/1637 :: UInt
+    load 221 // x/1868 :: UInt
+    dup
+    load 237 // x/1637 :: UInt
+    <=
+    select
+    store 220 // amt/1872 :: UInt
+    load 228 // v1848 :: Tuple(UInt, UInt)
+    int 8
+    extract_uint64
+    store 219 // y/1884 :: UInt
+    load 239 // v1630 :: Bool
+    bz l87_localIfF
+    int 0
+    store 218 // v1889 :: UInt
+    b l88_localIfK
+    l87_localIfF:
+    load 240 // x/1628 :: UInt
+    load 246 // rewardsLastRefreshed/1489 :: UInt
+    -
+    store 218 // v1889 :: UInt
+    l88_localIfK:
+    load 3 // GV_svs :: Null
+    int 251
+    extract_uint64
+    load 218 // v1889 :: UInt
+    load 250 // v1450 :: UInt
+    *
+    +
+    store 217 // x/1894 :: UInt
+    load 236 // y/1649 :: UInt
+    load 217 // x/1894 :: UInt
+    dup
+    load 236 // y/1649 :: UInt
+    <=
+    select
+    store 216 // x/1897 :: UInt
+    load 222 // v1866 :: Bool
+    bz l89_localIfF
+    load 216 // x/1897 :: UInt
+    store 215 // x/1900 :: UInt
+    b l90_localIfK
+    l89_localIfF:
+    load 216 // x/1897 :: UInt
+    load 229 // y/1843 :: UInt
+    mulw
+    load 245 // totalStaked/1490 :: UInt
+    divw
+    store 215 // x/1900 :: UInt
+    l90_localIfK:
+    load 219 // y/1884 :: UInt
+    load 215 // x/1900 :: UInt
+    >=
+    bz l91_localIfF
+    int 0
+    store 214 // x/1903 :: UInt
+    b l92_localIfK
+    l91_localIfF:
+    load 215 // x/1900 :: UInt
+    load 219 // y/1884 :: UInt
+    -
+    store 214 // x/1903 :: UInt
+    l92_localIfK:
+    load 235 // x/1651 :: UInt
+    load 214 // x/1903 :: UInt
+    dup
+    load 235 // x/1651 :: UInt
+    <=
+    select
+    store 213 // amt/1907 :: UInt
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 220 // amt/1872 :: UInt
+      itxn_field Amount
+      int pay
+      itxn_field TypeEnum
+      txn Sender
+      itxn_field Receiver
+      itxn_submit
+      // makeTxn }
+
+    load 231 // tokInfos'/1837 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    store 212 // tokInfo/1919 :: Tuple(UInt, UInt, Bool)
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 213 // amt/1907 :: UInt
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      txn Sender
+      itxn_field AssetReceiver
+      // resource: assets
+      load 253 // rewardToken1/1426 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+    txn Sender
+    byte base64(AQ==)
+    load 227 // y/1849 :: UInt
+    load 220 // amt/1872 :: UInt
+    +
+    itob
+    load 219 // y/1884 :: UInt
+    load 213 // amt/1907 :: UInt
+    +
+    itob
+    concat
+    load 229 // y/1843 :: UInt
+    itob
+    concat
+    concat
+    byte base64(AA==)
+    swap
+    app_local_put
+    load 238 // y/1635 :: UInt
+    load 220 // amt/1872 :: UInt
+    -
+    itob
+    load 236 // y/1649 :: UInt
+    load 213 // amt/1907 :: UInt
+    -
+    itob
+    concat
+    store 211 // v1956 :: Tuple(UInt, UInt)
+    byte base64(AAAAAAAAB6U=)
+    load 220 // amt/1872 :: UInt
+    itob
+    load 213 // amt/1907 :: UInt
+    itob
+    concat
+    load 211 // v1956 :: Tuple(UInt, UInt)
+    concat
+    concat
+    log // up to 40 bytes
+    load 220 // amt/1872 :: UInt
+    itob
+    load 213 // amt/1907 :: UInt
+    itob
+    concat
+    load 211 // v1956 :: Tuple(UInt, UInt)
+    concat
+    store 7 // GV_apiRet :: Null
+    load 255 // Deployer/1424 :: Address
+    load 254 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+    load 253 // rewardToken1/1426 :: Token
+    load 252 // stakeToken/1427 :: Token
+    load 251 // v1448 :: UInt
+    load 250 // v1450 :: UInt
+    load 249 // x/1469 :: UInt
+    load 248 // v1485 :: Tuple(UInt, UInt)
+    load 237 // x/1637 :: UInt
+    load 220 // amt/1872 :: UInt
+    -
+    itob
+    load 235 // x/1651 :: UInt
+    load 213 // amt/1907 :: UInt
+    -
+    itob
+    concat
+    load 211 // v1956 :: Tuple(UInt, UInt)
+    load 243 // lastConsensusTime/1492 :: UInt
+    load 245 // totalStaked/1490 :: UInt
+    global Round
+    load 244 // thisConsensusTime/1491 :: UInt
+    load 231 // tokInfos'/1837 :: Array(Tuple(UInt, UInt, Bool), 2)
+    pop
+    byte base64()
+    load 212 // tokInfo/1919 :: Tuple(UInt, UInt, Bool)
+    int 0
+    extract_uint64
+    load 213 // amt/1907 :: UInt
+    -
+    itob
+    load 212 // tokInfo/1919 :: Tuple(UInt, UInt, Bool)
+    extract 8 8
+    concat
+    load 212 // tokInfo/1919 :: Tuple(UInt, UInt, Bool)
+    extract 16 1
+    concat
+    concat
+    load 231 // tokInfos'/1837 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 17 17
+    concat
+    load 241 // netBalance/1498 :: UInt
+    load 220 // amt/1872 :: UInt
+    -
+    b loopBody2
+    // l77_Switch_Staker_harvest0_576 }
+
+  // publish4 }
+
+l54_publish_lt_4:
+pop
+
+  // { publish3
+  publish3:
+  // check step
+  int 3
+  load 1 // GV_currentStep :: UInt
+  ==
+  assert
+  // check time
+  load 4 // GV_argTime :: UInt
+  dup
+  int 0
+  ==
+  swap
+  load 2 // GV_currentTime :: UInt
+  ==
+  ||
+  assert
+  byte base64(AA==)
+  app_global_get
+  byte base64(AQ==)
+  app_global_get
+  concat
+  dup
+  store 3 // GV_svs :: Null
+  extract 0 32
+  store 255 // Deployer/1424 :: Address
+  load 3 // GV_svs :: Null
+  int 72
+  extract_uint64
+  store 254 // rewardToken1/1426 :: Token
+  load 3 // GV_svs :: Null
+  int 80
+  extract_uint64
+  store 253 // stakeToken/1427 :: Token
+  load 3 // GV_svs :: Null
+  extract 160 34
+  store 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+  load 3 // GV_svs :: Null
+  int 194
+  extract_uint64
+  store 251 // netBalance/1498 :: UInt
+  load 5 // GV_argMsg :: Null
+  store 250 // .fork1144.msg/2710 :: Data({"Any_halt0_1144": Tuple(), "Deployer0_1144": Null})
+  byte base64(LkXGAQ==)
+  load 250 // .fork1144.msg/2710 :: Data({"Any_halt0_1144": Tuple(), "Deployer0_1144": Null})
+  concat
+  log // up to 5 bytes
+  load 250 // .fork1144.msg/2710 :: Data({"Any_halt0_1144": Tuple(), "Deployer0_1144": Null})
+  int 0
+  getbyte
+  bnz l93_Switch_nz
+
+    // { l94_Switch_Any_halt0_1144
+    l94_Switch_Any_halt0_1144:
+    // ^ CheckPay
+    // at ./index.rsh:248:7:dot
+    byte base64(AAAAAAAACqA=)
+    log // up to 8 bytes
+    byte base64()
+    store 7 // GV_apiRet :: Null
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 251 // netBalance/1498 :: UInt
+      itxn_field Amount
+      int pay
+      itxn_field TypeEnum
+      // resource: accounts
+      load 255 // Deployer/1424 :: Address
+      itxn_field Receiver
+      itxn_submit
+      // makeTxn }
+
+    load 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    dup
+    store 249 // tokInfo/2731 :: Tuple(UInt, UInt, Bool)
+    int 0
+    extract_uint64
+    store 248 // v2732 :: UInt
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 248 // v2732 :: UInt
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      load 255 // Deployer/1424 :: Address
+      itxn_field AssetReceiver
+      // resource: assets
+      load 254 // rewardToken1/1426 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+      pop
+      byte base64()
+      load 248 // v2732 :: UInt
+      dup
+      -
+      itob
+      load 249 // tokInfo/2731 :: Tuple(UInt, UInt, Bool)
+      extract 8 8
+      concat
+      load 249 // tokInfo/2731 :: Tuple(UInt, UInt, Bool)
+      extract 16 1
+      concat
+      concat
+      load 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+      extract 17 17
+      concat
+      extract 17 17
+      int 0
+      extract_uint64
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      load 255 // Deployer/1424 :: Address
+      itxn_field AssetReceiver
+      // resource: assets
+      load 253 // stakeToken/1427 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      global CreatorAddress
+      itxn_field AssetCloseTo
+      global CurrentApplicationAddress
+      itxn_field AssetReceiver
+      load 253 // stakeToken/1427 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      global CreatorAddress
+      itxn_field AssetCloseTo
+      global CurrentApplicationAddress
+      itxn_field AssetReceiver
+      load 254 // rewardToken1/1426 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field Amount
+      int pay
+      itxn_field TypeEnum
+      global CreatorAddress
+      itxn_field CloseRemainderTo
+      global CurrentApplicationAddress
+      itxn_field Receiver
+      itxn_submit
+      // makeTxn }
+
+    txn OnCompletion
+    int DeleteApplication
+    ==
+    assert
+    b updateState
+    // l94_Switch_Any_halt0_1144 }
+
+  l93_Switch_nz:
+
+    // { l95_Switch_Deployer0_1144
+    l95_Switch_Deployer0_1144:
+    // ^ CheckPay
+    // at ./index.rsh:248:7:dot
+    txn Sender
+    load 255 // Deployer/1424 :: Address
+    ==
+    assert
+    // ^ Claim
+    // at ./index.rsh:248:7:application
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 251 // netBalance/1498 :: UInt
+      itxn_field Amount
+      int pay
+      itxn_field TypeEnum
+      // resource: accounts
+      load 255 // Deployer/1424 :: Address
+      itxn_field Receiver
+      itxn_submit
+      // makeTxn }
+
+    load 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+    extract 0 17
+    dup
+    store 249 // tokInfo/2871 :: Tuple(UInt, UInt, Bool)
+    int 0
+    extract_uint64
+    store 248 // v2872 :: UInt
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 248 // v2872 :: UInt
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      load 255 // Deployer/1424 :: Address
+      itxn_field AssetReceiver
+      // resource: assets
+      load 254 // rewardToken1/1426 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      load 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+      pop
+      byte base64()
+      load 248 // v2872 :: UInt
+      dup
+      -
+      itob
+      load 249 // tokInfo/2871 :: Tuple(UInt, UInt, Bool)
+      extract 8 8
+      concat
+      load 249 // tokInfo/2871 :: Tuple(UInt, UInt, Bool)
+      extract 16 1
+      concat
+      concat
+      load 252 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+      extract 17 17
+      concat
+      extract 17 17
+      int 0
+      extract_uint64
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      load 255 // Deployer/1424 :: Address
+      itxn_field AssetReceiver
+      // resource: assets
+      load 253 // stakeToken/1427 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      global CreatorAddress
+      itxn_field AssetCloseTo
+      global CurrentApplicationAddress
+      itxn_field AssetReceiver
+      load 253 // stakeToken/1427 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      global CreatorAddress
+      itxn_field AssetCloseTo
+      global CurrentApplicationAddress
+      itxn_field AssetReceiver
+      load 254 // rewardToken1/1426 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field Amount
+      int pay
+      itxn_field TypeEnum
+      global CreatorAddress
+      itxn_field CloseRemainderTo
+      global CurrentApplicationAddress
+      itxn_field Receiver
+      itxn_submit
+      // makeTxn }
+
+    txn OnCompletion
+    int DeleteApplication
+    ==
+    assert
+    b updateState
+    // l95_Switch_Deployer0_1144 }
+
+  // publish3 }
+
+l53_publish_lt_3:
+pop
+l52_publish_lt_2:
+dup
+int 1
+<
+bnz l96_publish_lt_1
+pop
+
+  // { publish1
+  publish1:
+  // check step
+  int 1
+  load 1 // GV_currentStep :: UInt
+  ==
+  assert
+  // check time
+  load 4 // GV_argTime :: UInt
+  dup
+  int 0
+  ==
+  swap
+  load 2 // GV_currentTime :: UInt
+  ==
+  ||
+  assert
+  byte base64(AA==)
+  app_global_get
+  byte base64(AQ==)
+  app_global_get
+  concat
+  dup
+  store 3 // GV_svs :: Null
+  extract 0 32
+  store 255 // Deployer/1424 :: Address
+  load 3 // GV_svs :: Null
+  int 72
+  extract_uint64
+  store 254 // rewardToken1/1426 :: Token
+  load 3 // GV_svs :: Null
+  int 88
+  extract_uint64
+  store 253 // thisConsensusTime/1428 :: UInt
+  load 3 // GV_svs :: Null
+  extract 96 34
+  store 252 // tokInfos'/1444 :: Array(Tuple(UInt, UInt, Bool), 2)
+  load 3 // GV_svs :: Null
+  int 146
+  extract_uint64
+  store 251 // sr/1449 :: UInt
+  load 3 // GV_svs :: Null
+  int 162
+  extract_uint64
+  store 250 // sr/1451 :: UInt
+  byte base64(mouRdA==)
+  log // up to 4 bytes
+
+    // { checkTxn
+    // resource: transactions
+    load 0 // GV_txnCounter :: UInt
+    dup
+    int 1
+    +
+    store 0 // GV_txnCounter :: UInt
+    load 251 // sr/1449 :: UInt
+    dig 1
+    gtxns Amount
+    ==
+    assert
+    int pay
+    dig 1
+    gtxns TypeEnum
+    ==
+    assert
+    global CurrentApplicationAddress
+    dig 1
+    gtxns Receiver
+    ==
+    assert
+    pop
+    // checkTxn }
+
+  // ^ CheckPay
+  // at ./index.rsh:82:12:dot
+  load 252 // tokInfos'/1444 :: Array(Tuple(UInt, UInt, Bool), 2)
+  extract 0 17
+  store 249 // tokInfo/1457 :: Tuple(UInt, UInt, Bool)
+
+    // { checkTxn
+    // resource: transactions
+    load 0 // GV_txnCounter :: UInt
+    dup
+    int 1
+    +
+    store 0 // GV_txnCounter :: UInt
+    load 250 // sr/1451 :: UInt
+    dig 1
+    gtxns AssetAmount
+    ==
+    assert
+    load 254 // rewardToken1/1426 :: Token
+    dig 1
+    gtxns XferAsset
+    ==
+    assert
+    int axfer
+    dig 1
+    gtxns TypeEnum
+    ==
+    assert
+    global CurrentApplicationAddress
+    dig 1
+    gtxns AssetReceiver
+    ==
+    assert
+    pop
+    // checkTxn }
+
+  // ^ CheckPay
+  // at ./index.rsh:82:12:dot
+  load 255 // Deployer/1424 :: Address
+  txn Sender
+  ==
+  assert
+  // ^ Claim: sender correct
+  // at ./index.rsh:82:12:dot
+  load 253 // thisConsensusTime/1428 :: UInt
+  int 2
+  +
+  store 248 // rewardsLastRefreshed/1468 :: UInt
+  byte base64(AAAAAAAAAAAAAAAAAAAAAA==)
+  store 247 // v1485 :: Tuple(UInt, UInt)
+  load 255 // Deployer/1424 :: Address
+  load 3 // GV_svs :: Null
+  extract 32 40
+  load 254 // rewardToken1/1426 :: Token
+  load 3 // GV_svs :: Null
+  int 80
+  extract_uint64
+  load 3 // GV_svs :: Null
+  int 138
+  extract_uint64
+  load 3 // GV_svs :: Null
+  int 154
+  extract_uint64
+  load 248 // rewardsLastRefreshed/1468 :: UInt
+  load 3 // GV_svs :: Null
+  int 130
+  extract_uint64
+  +
+  load 247 // v1485 :: Tuple(UInt, UInt)
+  dup
+  load 251 // sr/1449 :: UInt
+  itob
+  load 250 // sr/1451 :: UInt
+  itob
+  concat
+  load 248 // rewardsLastRefreshed/1468 :: UInt
+  int 0
+  global Round
+  load 253 // thisConsensusTime/1428 :: UInt
+  load 252 // tokInfos'/1444 :: Array(Tuple(UInt, UInt, Bool), 2)
+  pop
+  byte base64()
+  load 249 // tokInfo/1457 :: Tuple(UInt, UInt, Bool)
+  int 0
+  extract_uint64
+  load 250 // sr/1451 :: UInt
+  +
+  itob
+  load 249 // tokInfo/1457 :: Tuple(UInt, UInt, Bool)
+  extract 8 8
+  concat
+  load 249 // tokInfo/1457 :: Tuple(UInt, UInt, Bool)
+  extract 16 1
+  concat
+  concat
+  load 252 // tokInfos'/1444 :: Array(Tuple(UInt, UInt, Bool), 2)
+  extract 17 17
+  concat
+  load 251 // sr/1449 :: UInt
+  b loopBody2
+  // publish1 }
+
+l96_publish_lt_1:
+pop
+
+  // { publish0
+  publish0:
+  // check step
+  int 0
+  load 1 // GV_currentStep :: UInt
+  ==
+  assert
+  // check time
+  load 4 // GV_argTime :: UInt
+  dup
+  int 0
+  ==
+  swap
+  load 2 // GV_currentTime :: UInt
+  ==
+  ||
+  assert
+  load 5 // GV_argMsg :: Null
+  extract 0 40
+  store 255 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  load 5 // GV_argMsg :: Null
+  int 40
+  extract_uint64
+  store 254 // rewardToken1/1426 :: Token
+  load 5 // GV_argMsg :: Null
+  int 48
+  extract_uint64
+  store 253 // stakeToken/1427 :: Token
+  byte base64(XohMcA==)
+  load 255 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  concat
+  load 254 // rewardToken1/1426 :: Token
+  itob
+  concat
+  load 253 // stakeToken/1427 :: Token
+  itob
+  concat
+  log // up to 60 bytes
+
+    // { checkTxn
+    // resource: transactions
+    load 0 // GV_txnCounter :: UInt
+    dup
+    int 1
+    +
+    store 0 // GV_txnCounter :: UInt
+    int 100000
+    dig 1
+    gtxns Amount
+    ==
+    assert
+    int pay
+    dig 1
+    gtxns TypeEnum
+    ==
+    assert
+    global CurrentApplicationAddress
+    dig 1
+    gtxns Receiver
+    ==
+    assert
+    pop
+    // checkTxn }
+
+  // ^ CheckPay
+  // at ./index.rsh:73:12:dot
+  byte base64(AAAAAAAAAAAAAAAAAAAAAAA=)
+  dup
+  store 252 // initialInfo/1412 :: Tuple(UInt, UInt, Bool)
+  dup
+  concat
+  store 251 // tokInfos/1413 :: Array(Tuple(UInt, UInt, Bool), 2)
+  load 254 // rewardToken1/1426 :: Token
+  load 253 // stakeToken/1427 :: Token
+  !=
+  assert
+  // ^ Claim: non-network tokens distinct
+  // at ./index.rsh:73:12:dot
+  load 251 // tokInfos/1413 :: Array(Tuple(UInt, UInt, Bool), 2)
+  extract 0 17
+  store 250 // tokInfo/1432 :: Tuple(UInt, UInt, Bool)
+  load 251 // tokInfos/1413 :: Array(Tuple(UInt, UInt, Bool), 2)
+  pop
+  byte base64()
+  byte base64(AAAAAAAAAAA=)
+  load 250 // tokInfo/1432 :: Tuple(UInt, UInt, Bool)
+  extract 8 8
+  concat
+  load 250 // tokInfo/1432 :: Tuple(UInt, UInt, Bool)
+  extract 16 1
+  concat
+  concat
+  load 251 // tokInfos/1413 :: Array(Tuple(UInt, UInt, Bool), 2)
+  extract 17 17
+  concat
+  store 249 // tokInfos'/1437 :: Array(Tuple(UInt, UInt, Bool), 2)
+
+    // { TokenInit
+
+      // { checkTxn
+      // resource: transactions
+      load 0 // GV_txnCounter :: UInt
+      dup
+      int 1
+      +
+      store 0 // GV_txnCounter :: UInt
+      int 100000
+      dig 1
+      gtxns Amount
+      ==
+      assert
+      int pay
+      dig 1
+      gtxns TypeEnum
+      ==
+      assert
+      global CurrentApplicationAddress
+      dig 1
+      gtxns Receiver
+      ==
+      assert
+      pop
+      // checkTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      global CurrentApplicationAddress
+      itxn_field AssetReceiver
+      // resource: assets
+      load 254 // rewardToken1/1426 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+    // TokenInit }
+
+  load 249 // tokInfos'/1437 :: Array(Tuple(UInt, UInt, Bool), 2)
+  extract 17 17
+  store 248 // tokInfo/1439 :: Tuple(UInt, UInt, Bool)
+  load 249 // tokInfos'/1437 :: Array(Tuple(UInt, UInt, Bool), 2)
+  extract 0 17
+  byte base64(AAAAAAAAAAA=)
+  load 248 // tokInfo/1439 :: Tuple(UInt, UInt, Bool)
+  extract 8 8
+  concat
+  load 248 // tokInfo/1439 :: Tuple(UInt, UInt, Bool)
+  extract 16 1
+  concat
+  concat
+  load 249 // tokInfos'/1437 :: Array(Tuple(UInt, UInt, Bool), 2)
+  pop
+  store 247 // tokInfos'/1444 :: Array(Tuple(UInt, UInt, Bool), 2)
+
+    // { TokenInit
+
+      // { checkTxn
+      // resource: transactions
+      load 0 // GV_txnCounter :: UInt
+      dup
+      int 1
+      +
+      store 0 // GV_txnCounter :: UInt
+      int 100000
+      dig 1
+      gtxns Amount
+      ==
+      assert
+      int pay
+      dig 1
+      gtxns TypeEnum
+      ==
+      assert
+      global CurrentApplicationAddress
+      dig 1
+      gtxns Receiver
+      ==
+      assert
+      pop
+      // checkTxn }
+
+
+      // { makeTxn
+      itxn_begin
+      int 0
+      itxn_field Fee
+      int 0
+      itxn_field AssetAmount
+      int axfer
+      itxn_field TypeEnum
+      global CurrentApplicationAddress
+      itxn_field AssetReceiver
+      // resource: assets
+      load 253 // stakeToken/1427 :: Token
+      itxn_field XferAsset
+      itxn_submit
+      // makeTxn }
+
+    // TokenInit }
+
+  // ^ CheckPay
+  // at ./index.rsh:73:12:dot
+  load 255 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  extract 16 16
+  store 246 // rewardsPerBlock/1446 :: Tuple(UInt, UInt)
+  load 255 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  int 32
+  extract_uint64
+  store 245 // duration/1447 :: UInt
+  load 246 // rewardsPerBlock/1446 :: Tuple(UInt, UInt)
+  int 0
+  extract_uint64
+  dup
+  store 244 // v1448 :: UInt
+  load 245 // duration/1447 :: UInt
+  *
+  store 243 // sr/1449 :: UInt
+  load 246 // rewardsPerBlock/1446 :: Tuple(UInt, UInt)
+  int 8
+  extract_uint64
+  dup
+  store 242 // v1450 :: UInt
+  load 245 // duration/1447 :: UInt
+  *
+  store 241 // sr/1451 :: UInt
+  txn Sender
+  load 255 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  concat
+  load 254 // rewardToken1/1426 :: Token
+  itob
+  concat
+  load 253 // stakeToken/1427 :: Token
+  itob
+  concat
+  global Round
+  itob
+  concat
+  load 247 // tokInfos'/1444 :: Array(Tuple(UInt, UInt, Bool), 2)
+  concat
+  load 245 // duration/1447 :: UInt
+  itob
+  concat
+  load 244 // v1448 :: UInt
+  itob
+  concat
+  load 243 // sr/1449 :: UInt
+  itob
+  concat
+  load 242 // v1450 :: UInt
+  itob
+  concat
+  load 241 // sr/1451 :: UInt
+  itob
+  concat
+  byte base64(AA==)
+  dig 1
+  extract 0 127
+  app_global_put
+  byte base64(AQ==)
+  dig 1
+  extract 127 43
+  app_global_put
+  pop
+  int 1
+  store 1 // GV_currentStep :: UInt
+  global Round
+  store 2 // GV_currentTime :: UInt
+  txn OnCompletion
+  int NoOp
+  ==
+  assert
+  b updateState
+  // publish0 }
+
+
+  // { loopBody2
+  loopBody2:
+  store 255 // netBalance/1498 :: UInt
+  store 254 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+  store 253 // lastConsensusTime/1492 :: UInt
+  store 252 // thisConsensusTime/1491 :: UInt
+  store 251 // totalStaked/1490 :: UInt
+  store 250 // rewardsLastRefreshed/1489 :: UInt
+  store 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  store 248 // lastAvailableRewards/1487 :: Tuple(UInt, UInt)
+  store 247 // v1485 :: Tuple(UInt, UInt)
+  store 246 // x/1469 :: UInt
+  store 245 // v1450 :: UInt
+  store 244 // v1448 :: UInt
+  store 243 // stakeToken/1427 :: Token
+  store 242 // rewardToken1/1426 :: Token
+  store 241 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  store 240 // Deployer/1424 :: Address
+  load 251 // totalStaked/1490 :: UInt
+  int 0
+  !=
+  load 253 // lastConsensusTime/1492 :: UInt
+  load 246 // x/1469 :: UInt
+  <=
+  ||
+  bz l97_ifF
+  load 248 // lastAvailableRewards/1487 :: Tuple(UInt, UInt)
+  int 0
+  extract_uint64
+  store 239 // v1626 :: UInt
+  load 253 // lastConsensusTime/1492 :: UInt
+  load 246 // x/1469 :: UInt
+  dup
+  load 253 // lastConsensusTime/1492 :: UInt
+  <=
+  select
+  store 238 // x/1628 :: UInt
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  load 238 // x/1628 :: UInt
+  >=
+  dup
+  store 236 // v1630 :: Bool
+  bz l98_localIfF
+  int 0
+  store 237 // v1629 :: UInt
+  b l99_localIfK
+  l98_localIfF:
+  load 238 // x/1628 :: UInt
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  -
+  store 237 // v1629 :: UInt
+  l99_localIfK:
+  load 239 // v1626 :: UInt
+  load 237 // v1629 :: UInt
+  load 244 // v1448 :: UInt
+  *
+  +
+  store 235 // x/1634 :: UInt
+  load 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  int 0
+  extract_uint64
+  dup
+  store 234 // y/1635 :: UInt
+  load 235 // x/1634 :: UInt
+  dup
+  load 234 // y/1635 :: UInt
+  <=
+  select
+  store 233 // x/1637 :: UInt
+  load 248 // lastAvailableRewards/1487 :: Tuple(UInt, UInt)
+  int 8
+  extract_uint64
+  store 232 // v1640 :: UInt
+  load 236 // v1630 :: Bool
+  bz l100_localIfF
+  int 0
+  store 231 // v1643 :: UInt
+  b l101_localIfK
+  l100_localIfF:
+  load 238 // x/1628 :: UInt
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  -
+  store 231 // v1643 :: UInt
+  l101_localIfK:
+  load 232 // v1640 :: UInt
+  load 231 // v1643 :: UInt
+  load 245 // v1450 :: UInt
+  *
+  +
+  store 230 // x/1648 :: UInt
+  load 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  int 8
+  extract_uint64
+  dup
+  store 229 // y/1649 :: UInt
+  load 230 // x/1648 :: UInt
+  dup
+  load 229 // y/1649 :: UInt
+  <=
+  select
+  store 228 // x/1651 :: UInt
+  load 233 // x/1637 :: UInt
+  itob
+  load 228 // x/1651 :: UInt
+  itob
+  concat
+  store 227 // v1654 :: Tuple(UInt, UInt)
+  load 240 // Deployer/1424 :: Address
+  load 241 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  concat
+  load 242 // rewardToken1/1426 :: Token
+  itob
+  concat
+  load 243 // stakeToken/1427 :: Token
+  itob
+  concat
+  load 244 // v1448 :: UInt
+  itob
+  concat
+  load 245 // v1450 :: UInt
+  itob
+  concat
+  load 246 // x/1469 :: UInt
+  itob
+  concat
+  load 247 // v1485 :: Tuple(UInt, UInt)
+  concat
+  load 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  concat
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  itob
+  concat
+  load 251 // totalStaked/1490 :: UInt
+  itob
+  concat
+  load 252 // thisConsensusTime/1491 :: UInt
+  itob
+  concat
+  load 253 // lastConsensusTime/1492 :: UInt
+  itob
+  concat
+  load 254 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+  concat
+  load 255 // netBalance/1498 :: UInt
+  itob
+  concat
+  load 239 // v1626 :: UInt
+  itob
+  concat
+  load 238 // x/1628 :: UInt
+  itob
+  concat
+  load 236 // v1630 :: Bool
+  itob
+  substring 7 8
+  concat
+  load 234 // y/1635 :: UInt
+  itob
+  concat
+  load 233 // x/1637 :: UInt
+  itob
+  concat
+  load 232 // v1640 :: UInt
+  itob
+  concat
+  load 229 // y/1649 :: UInt
+  itob
+  concat
+  load 228 // x/1651 :: UInt
+  itob
+  concat
+  load 227 // v1654 :: Tuple(UInt, UInt)
+  concat
+  byte base64(AA==)
+  dig 1
+  extract 0 127
+  app_global_put
+  byte base64(AQ==)
+  dig 1
+  extract 127 127
+  app_global_put
+  byte base64(Ag==)
+  dig 1
+  extract 254 37
+  app_global_put
+  pop
+  int 6
+  store 1 // GV_currentStep :: UInt
+  global Round
+  store 2 // GV_currentTime :: UInt
+  txn OnCompletion
+  int NoOp
+  ==
+  assert
+  b updateState
+  l97_ifF:
+  load 248 // lastAvailableRewards/1487 :: Tuple(UInt, UInt)
+  int 0
+  extract_uint64
+  store 239 // v2592 :: UInt
+  load 253 // lastConsensusTime/1492 :: UInt
+  load 246 // x/1469 :: UInt
+  dup
+  load 253 // lastConsensusTime/1492 :: UInt
+  <=
+  select
+  store 238 // x/2594 :: UInt
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  load 238 // x/2594 :: UInt
+  >=
+  dup
+  store 236 // v2596 :: Bool
+  bz l102_localIfF
+  int 0
+  store 237 // v2595 :: UInt
+  b l103_localIfK
+  l102_localIfF:
+  load 238 // x/2594 :: UInt
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  -
+  store 237 // v2595 :: UInt
+  l103_localIfK:
+  load 239 // v2592 :: UInt
+  load 237 // v2595 :: UInt
+  load 244 // v1448 :: UInt
+  *
+  +
+  store 235 // x/2600 :: UInt
+  load 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  int 0
+  extract_uint64
+  dup
+  store 234 // y/2601 :: UInt
+  load 235 // x/2600 :: UInt
+  dup
+  load 234 // y/2601 :: UInt
+  <=
+  select
+  store 233 // y/2603 :: UInt
+  load 248 // lastAvailableRewards/1487 :: Tuple(UInt, UInt)
+  int 8
+  extract_uint64
+  store 232 // v2606 :: UInt
+  load 236 // v2596 :: Bool
+  bz l104_localIfF
+  int 0
+  store 231 // v2609 :: UInt
+  b l105_localIfK
+  l104_localIfF:
+  load 238 // x/2594 :: UInt
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  -
+  store 231 // v2609 :: UInt
+  l105_localIfK:
+  load 232 // v2606 :: UInt
+  load 231 // v2609 :: UInt
+  load 245 // v1450 :: UInt
+  *
+  +
+  store 230 // x/2614 :: UInt
+  load 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  int 8
+  extract_uint64
+  dup
+  store 229 // y/2615 :: UInt
+  load 230 // x/2614 :: UInt
+  dup
+  load 229 // y/2615 :: UInt
+  <=
+  select
+  store 228 // y/2617 :: UInt
+  load 240 // Deployer/1424 :: Address
+  load 241 // opts/1425 :: Struct([['"rewardToken1"', Token], ['"stakeToken"', Token], ['"rewardsPerBlock"', Tuple(UInt, UInt)], ['"duration"', UInt]])
+  concat
+  load 242 // rewardToken1/1426 :: Token
+  itob
+  concat
+  load 243 // stakeToken/1427 :: Token
+  itob
+  concat
+  load 244 // v1448 :: UInt
+  itob
+  concat
+  load 245 // v1450 :: UInt
+  itob
+  concat
+  load 246 // x/1469 :: UInt
+  itob
+  concat
+  load 247 // v1485 :: Tuple(UInt, UInt)
+  concat
+  load 249 // remainingRewards/1488 :: Tuple(UInt, UInt)
+  concat
+  load 250 // rewardsLastRefreshed/1489 :: UInt
+  itob
+  concat
+  load 251 // totalStaked/1490 :: UInt
+  itob
+  concat
+  load 254 // tokenInfos/1497 :: Array(Tuple(UInt, UInt, Bool), 2)
+  concat
+  load 255 // netBalance/1498 :: UInt
+  itob
+  concat
+  load 239 // v2592 :: UInt
+  itob
+  concat
+  load 234 // y/2601 :: UInt
+  itob
+  concat
+  load 233 // y/2603 :: UInt
+  itob
+  concat
+  load 232 // v2606 :: UInt
+  itob
+  concat
+  load 229 // y/2615 :: UInt
+  itob
+  concat
+  load 228 // y/2617 :: UInt
+  itob
+  concat
+  byte base64(AA==)
+  dig 1
+  extract 0 127
+  app_global_put
+  byte base64(AQ==)
+  dig 1
+  extract 127 123
+  app_global_put
+  pop
+  int 3
+  store 1 // GV_currentStep :: UInt
+  global Round
+  store 2 // GV_currentTime :: UInt
+  txn OnCompletion
+  int NoOp
+  ==
+  assert
+  b updateState
+  // loopBody2 }
+
+updateState:
+byte base64()
+load 1 // GV_currentStep :: UInt
+itob
+load 2 // GV_currentTime :: UInt
+itob
+concat
+app_global_put
+load 6 // GV_wasMeth :: Bool
+bz checkSize
+apiReturn:
+byte base64(FR98dQ==)
+load 7 // GV_apiRet :: Null
+concat
+log // up to 44 bytes
+checkSize:
+load 0 // GV_txnCounter :: UInt
+dup
+int 1
++
+global GroupSize
+==
+assert
+txn GroupIndex
+==
+assert
+done:
+int 1
+return
+alloc:
+txn OnCompletion
+int NoOp
+==
+assert
+int 0
+store 1 // GV_currentStep :: UInt
+int 0
+store 2 // GV_currentTime :: UInt
+b updateState
