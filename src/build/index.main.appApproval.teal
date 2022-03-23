@@ -893,17 +893,13 @@ txna ApplicationArgs 3
 txna ApplicationArgs 1
 btoi
 dup
-int 2
-<
-bnz l51_publish_lt_2
-dup
 int 3
 <
-bnz l52_publish_lt_3
+bnz l51_publish_lt_3
 dup
 int 4
 <
-bnz l53_publish_lt_4
+bnz l52_publish_lt_4
 int 4
 ==
 assert
@@ -1021,17 +1017,17 @@ assert
   dup
   int 1
   <
-  bnz l54_Switch_lt_1
+  bnz l53_Switch_lt_1
   dup
   int 2
   <
-  bnz l55_Switch_lt_2
+  bnz l54_Switch_lt_2
   int 2
   ==
   assert
 
-    // { l56_Switch_Staker_withdraw0_576
-    l56_Switch_Staker_withdraw0_576:
+    // { l55_Switch_Staker_withdraw0_576
+    l55_Switch_Staker_withdraw0_576:
     load 233 // .fork576.msg/1800 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
     extract 1 8
     store 232 // data_id/2335 :: Tuple(UInt)
@@ -1123,61 +1119,61 @@ assert
     ==
     dup
     store 220 // v2577 :: Bool
-    bz l57_localIfF
+    bz l56_localIfF
     load 237 // x/1644 :: UInt
     store 221 // y/2576 :: UInt
-    b l58_localIfK
-    l57_localIfF:
+    b l57_localIfK
+    l56_localIfF:
     load 237 // x/1644 :: UInt
     load 229 // y/2548 :: UInt
     mulw
     load 225 // totalStaked/2568 :: UInt
     divw
     store 221 // y/2576 :: UInt
-    l58_localIfK:
+    l57_localIfK:
     load 221 // y/2576 :: UInt
     load 222 // x/2575 :: UInt
     >=
-    bz l59_localIfF
+    bz l58_localIfF
     int 0
     store 219 // v2579 :: UInt
-    b l60_localIfK
-    l59_localIfF:
+    b l59_localIfK
+    l58_localIfF:
     load 222 // x/2575 :: UInt
     load 221 // y/2576 :: UInt
     -
     store 219 // v2579 :: UInt
-    l60_localIfK:
+    l59_localIfK:
     load 223 // currentPaid/2574 :: Tuple(UInt, UInt)
     int 8
     extract_uint64
     store 218 // x/2582 :: UInt
     load 220 // v2577 :: Bool
-    bz l61_localIfF
+    bz l60_localIfF
     load 235 // x/1658 :: UInt
     store 217 // y/2583 :: UInt
-    b l62_localIfK
-    l61_localIfF:
+    b l61_localIfK
+    l60_localIfF:
     load 235 // x/1658 :: UInt
     load 229 // y/2548 :: UInt
     mulw
     load 225 // totalStaked/2568 :: UInt
     divw
     store 217 // y/2583 :: UInt
-    l62_localIfK:
+    l61_localIfK:
     load 217 // y/2583 :: UInt
     load 218 // x/2582 :: UInt
     >=
-    bz l63_localIfF
+    bz l62_localIfF
     int 0
     store 216 // v2586 :: UInt
-    b l64_localIfK
-    l63_localIfF:
+    b l63_localIfK
+    l62_localIfF:
     load 218 // x/2582 :: UInt
     load 217 // y/2583 :: UInt
     -
     store 216 // v2586 :: UInt
-    l64_localIfK:
+    l63_localIfK:
     txn Sender
     byte base64(AA==)
     byte base64(AQ==)
@@ -1236,13 +1232,13 @@ assert
     concat
     load 241 // netBalance/1505 :: UInt
     b loopBody2
-    // l56_Switch_Staker_withdraw0_576 }
+    // l55_Switch_Staker_withdraw0_576 }
 
-  l55_Switch_lt_2:
+  l54_Switch_lt_2:
   pop
 
-    // { l65_Switch_Staker_stake0_576
-    l65_Switch_Staker_stake0_576:
+    // { l64_Switch_Staker_stake0_576
+    l64_Switch_Staker_stake0_576:
     load 233 // .fork576.msg/1800 :: Data({"Staker_harvest0_576": Tuple(), "Staker_stake0_576": Tuple(UInt), "Staker_withdraw0_576": Tuple(UInt)})
     extract 1 8
     store 232 // data_id/2069 :: Tuple(UInt)
@@ -1259,7 +1255,7 @@ assert
       // { checkTxn
       load 231 // amt/2081 :: UInt
       load 252 // stakeToken/1434 :: Token
-      callsub l66_LF_checkTxn_tok
+      callsub l65_LF_checkTxn_tok
       // checkTxn }
 
     // ^ CheckPay
@@ -1296,31 +1292,31 @@ assert
     ==
     dup
     store 224 // v2261 :: Bool
-    bz l67_localIfF
+    bz l66_localIfF
     load 237 // x/1644 :: UInt
     store 225 // morePaid/2260 :: UInt
-    b l68_localIfK
-    l67_localIfF:
+    b l67_localIfK
+    l66_localIfF:
     load 237 // x/1644 :: UInt
     load 231 // amt/2081 :: UInt
     mulw
     load 229 // totalStaked/2248 :: UInt
     divw
     store 225 // morePaid/2260 :: UInt
-    l68_localIfK:
+    l67_localIfK:
     load 224 // v2261 :: Bool
-    bz l69_localIfF
+    bz l68_localIfF
     load 235 // x/1658 :: UInt
     store 223 // morePaid/2265 :: UInt
-    b l70_localIfK
-    l69_localIfF:
+    b l69_localIfK
+    l68_localIfF:
     load 235 // x/1658 :: UInt
     load 231 // amt/2081 :: UInt
     mulw
     load 229 // totalStaked/2248 :: UInt
     divw
     store 223 // morePaid/2265 :: UInt
-    l70_localIfK:
+    l69_localIfK:
     txn Sender
     byte base64(AA==)
     byte base64(AQ==)
@@ -1387,13 +1383,13 @@ assert
     concat
     load 241 // netBalance/1505 :: UInt
     b loopBody2
-    // l65_Switch_Staker_stake0_576 }
+    // l64_Switch_Staker_stake0_576 }
 
-  l54_Switch_lt_1:
+  l53_Switch_lt_1:
   pop
 
-    // { l71_Switch_Staker_harvest0_576
-    l71_Switch_Staker_harvest0_576:
+    // { l70_Switch_Staker_harvest0_576
+    l70_Switch_Staker_harvest0_576:
     api_Staker_harvest:
     // ^ CheckPay
     // at ./users/simple-staker/src/index.rsh:120:19:dot
@@ -1440,16 +1436,16 @@ assert
     extract_uint64
     store 227 // y/1859 :: UInt
     load 239 // v1637 :: Bool
-    bz l72_localIfF
+    bz l71_localIfF
     int 0
     store 226 // v1864 :: UInt
-    b l73_localIfK
-    l72_localIfF:
+    b l72_localIfK
+    l71_localIfF:
     load 240 // x/1635 :: UInt
     load 246 // rewardsLastRefreshed/1496 :: UInt
     -
     store 226 // v1864 :: UInt
-    l73_localIfK:
+    l72_localIfK:
     load 3 // GV_svs :: Null
     int 218
     extract_uint64
@@ -1470,31 +1466,31 @@ assert
     ==
     dup
     store 222 // v1876 :: Bool
-    bz l74_localIfF
+    bz l73_localIfF
     load 224 // x/1872 :: UInt
     store 223 // x/1875 :: UInt
-    b l75_localIfK
-    l74_localIfF:
+    b l74_localIfK
+    l73_localIfF:
     load 224 // x/1872 :: UInt
     load 229 // y/1853 :: UInt
     mulw
     load 245 // totalStaked/1497 :: UInt
     divw
     store 223 // x/1875 :: UInt
-    l75_localIfK:
+    l74_localIfK:
     load 227 // y/1859 :: UInt
     load 223 // x/1875 :: UInt
     >=
-    bz l76_localIfF
+    bz l75_localIfF
     int 0
     store 221 // x/1878 :: UInt
-    b l77_localIfK
-    l76_localIfF:
+    b l76_localIfK
+    l75_localIfF:
     load 223 // x/1875 :: UInt
     load 227 // y/1859 :: UInt
     -
     store 221 // x/1878 :: UInt
-    l77_localIfK:
+    l76_localIfK:
     load 237 // x/1644 :: UInt
     load 221 // x/1878 :: UInt
     dup
@@ -1507,16 +1503,16 @@ assert
     extract_uint64
     store 219 // y/1894 :: UInt
     load 239 // v1637 :: Bool
-    bz l78_localIfF
+    bz l77_localIfF
     int 0
     store 218 // v1899 :: UInt
-    b l79_localIfK
-    l78_localIfF:
+    b l78_localIfK
+    l77_localIfF:
     load 240 // x/1635 :: UInt
     load 246 // rewardsLastRefreshed/1496 :: UInt
     -
     store 218 // v1899 :: UInt
-    l79_localIfK:
+    l78_localIfK:
     load 3 // GV_svs :: Null
     int 251
     extract_uint64
@@ -1533,31 +1529,31 @@ assert
     select
     store 216 // x/1907 :: UInt
     load 222 // v1876 :: Bool
-    bz l80_localIfF
+    bz l79_localIfF
     load 216 // x/1907 :: UInt
     store 215 // x/1910 :: UInt
-    b l81_localIfK
-    l80_localIfF:
+    b l80_localIfK
+    l79_localIfF:
     load 216 // x/1907 :: UInt
     load 229 // y/1853 :: UInt
     mulw
     load 245 // totalStaked/1497 :: UInt
     divw
     store 215 // x/1910 :: UInt
-    l81_localIfK:
+    l80_localIfK:
     load 219 // y/1894 :: UInt
     load 215 // x/1910 :: UInt
     >=
-    bz l82_localIfF
+    bz l81_localIfF
     int 0
     store 214 // x/1913 :: UInt
-    b l83_localIfK
-    l82_localIfF:
+    b l82_localIfK
+    l81_localIfF:
     load 215 // x/1910 :: UInt
     load 219 // y/1894 :: UInt
     -
     store 214 // x/1913 :: UInt
-    l83_localIfK:
+    l82_localIfK:
     load 235 // x/1658 :: UInt
     load 214 // x/1913 :: UInt
     dup
@@ -1685,11 +1681,11 @@ assert
     load 220 // amt/1882 :: UInt
     -
     b loopBody2
-    // l71_Switch_Staker_harvest0_576 }
+    // l70_Switch_Staker_harvest0_576 }
 
   // publish4 }
 
-l53_publish_lt_4:
+l52_publish_lt_4:
 pop
 
   // { publish3
@@ -1742,10 +1738,10 @@ pop
   load 250 // .fork1148.msg/2722 :: Data({"Any_halt0_1148": Tuple(), "Deployer0_1148": Null})
   int 0
   getbyte
-  bnz l84_Switch_nz
+  bnz l83_Switch_nz
 
-    // { l85_Switch_Any_halt0_1148
-    l85_Switch_Any_halt0_1148:
+    // { l84_Switch_Any_halt0_1148
+    l84_Switch_Any_halt0_1148:
     api_Any_halt:
     // ^ CheckPay
     // at ./users/simple-staker/src/index.rsh:248:7:dot
@@ -1861,12 +1857,12 @@ pop
       // makeTxn }
 
     b updateStateHalt
-    // l85_Switch_Any_halt0_1148 }
+    // l84_Switch_Any_halt0_1148 }
 
-  l84_Switch_nz:
+  l83_Switch_nz:
 
-    // { l86_Switch_Deployer0_1148
-    l86_Switch_Deployer0_1148:
+    // { l85_Switch_Deployer0_1148
+    l85_Switch_Deployer0_1148:
     // ^ CheckPay
     // at ./users/simple-staker/src/index.rsh:248:7:dot
     txn Sender
@@ -1983,18 +1979,18 @@ pop
       // makeTxn }
 
     b updateStateHalt
-    // l86_Switch_Deployer0_1148 }
+    // l85_Switch_Deployer0_1148 }
 
   // publish3 }
 
-l52_publish_lt_3:
-pop
-l51_publish_lt_2:
+l51_publish_lt_3:
 dup
 int 1
 <
-bnz l87_publish_lt_1
-pop
+bnz l86_publish_lt_1
+int 1
+==
+assert
 
   // { publish1
   publish1:
@@ -2044,7 +2040,7 @@ pop
 
     // { checkTxn
     load 251 // sr/1456 :: UInt
-    callsub l88_LF_checkTxn_net
+    callsub l87_LF_checkTxn_net
     // checkTxn }
 
   // ^ CheckPay
@@ -2056,7 +2052,7 @@ pop
     // { checkTxn
     load 250 // sr/1458 :: UInt
     load 254 // rewardToken1/1433 :: Token
-    callsub l66_LF_checkTxn_tok
+    callsub l65_LF_checkTxn_tok
     // checkTxn }
 
   // ^ CheckPay
@@ -2122,7 +2118,7 @@ pop
   b loopBody2
   // publish1 }
 
-l87_publish_lt_1:
+l86_publish_lt_1:
 pop
 
   // { publish0
@@ -2167,7 +2163,7 @@ pop
 
     // { checkTxn
     int 100000
-    callsub l88_LF_checkTxn_net
+    callsub l87_LF_checkTxn_net
     // checkTxn }
 
   // ^ CheckPay
@@ -2205,7 +2201,7 @@ pop
 
       // { checkTxn
       int 100000
-      callsub l88_LF_checkTxn_net
+      callsub l87_LF_checkTxn_net
       // checkTxn }
 
 
@@ -2247,7 +2243,7 @@ pop
 
       // { checkTxn
       int 100000
-      callsub l88_LF_checkTxn_net
+      callsub l87_LF_checkTxn_net
       // checkTxn }
 
 
@@ -2365,7 +2361,7 @@ pop
   load 246 // x/1476 :: UInt
   <=
   ||
-  bz l89_ifF
+  bz l88_ifF
   load 248 // lastAvailableRewards/1494 :: Tuple(UInt, UInt)
   int 0
   extract_uint64
@@ -2382,16 +2378,16 @@ pop
   >=
   dup
   store 236 // v1637 :: Bool
-  bz l90_localIfF
+  bz l89_localIfF
   int 0
   store 237 // v1636 :: UInt
-  b l91_localIfK
-  l90_localIfF:
+  b l90_localIfK
+  l89_localIfF:
   load 238 // x/1635 :: UInt
   load 250 // rewardsLastRefreshed/1496 :: UInt
   -
   store 237 // v1636 :: UInt
-  l91_localIfK:
+  l90_localIfK:
   load 239 // v1633 :: UInt
   load 237 // v1636 :: UInt
   load 244 // v1455 :: UInt
@@ -2414,16 +2410,16 @@ pop
   extract_uint64
   store 232 // v1647 :: UInt
   load 236 // v1637 :: Bool
-  bz l92_localIfF
+  bz l91_localIfF
   int 0
   store 231 // v1650 :: UInt
-  b l93_localIfK
-  l92_localIfF:
+  b l92_localIfK
+  l91_localIfF:
   load 238 // x/1635 :: UInt
   load 250 // rewardsLastRefreshed/1496 :: UInt
   -
   store 231 // v1650 :: UInt
-  l93_localIfK:
+  l92_localIfK:
   load 232 // v1647 :: UInt
   load 231 // v1650 :: UInt
   load 245 // v1457 :: UInt
@@ -2531,7 +2527,7 @@ pop
   global Round
   store 2 // GV_currentTime :: UInt
   b updateStateNoOp
-  l89_ifF:
+  l88_ifF:
   load 248 // lastAvailableRewards/1494 :: Tuple(UInt, UInt)
   int 0
   extract_uint64
@@ -2548,16 +2544,16 @@ pop
   >=
   dup
   store 236 // v2606 :: Bool
-  bz l94_localIfF
+  bz l93_localIfF
   int 0
   store 237 // v2605 :: UInt
-  b l95_localIfK
-  l94_localIfF:
+  b l94_localIfK
+  l93_localIfF:
   load 238 // x/2604 :: UInt
   load 250 // rewardsLastRefreshed/1496 :: UInt
   -
   store 237 // v2605 :: UInt
-  l95_localIfK:
+  l94_localIfK:
   load 239 // v2602 :: UInt
   load 237 // v2605 :: UInt
   load 244 // v1455 :: UInt
@@ -2580,16 +2576,16 @@ pop
   extract_uint64
   store 232 // v2616 :: UInt
   load 236 // v2606 :: Bool
-  bz l96_localIfF
+  bz l95_localIfF
   int 0
   store 231 // v2619 :: UInt
-  b l97_localIfK
-  l96_localIfF:
+  b l96_localIfK
+  l95_localIfF:
   load 238 // x/2604 :: UInt
   load 250 // rewardsLastRefreshed/1496 :: UInt
   -
   store 231 // v2619 :: UInt
-  l97_localIfK:
+  l96_localIfK:
   load 232 // v2616 :: UInt
   load 231 // v2619 :: UInt
   load 245 // v1457 :: UInt
@@ -2737,30 +2733,26 @@ int NoOp
 assert
 b apiReturn_noCheck
 alloc:
-txn OnCompletion
-int NoOp
-==
-assert
 int 0
 store 1 // GV_currentStep :: UInt
 int 0
 store 2 // GV_currentTime :: UInt
-b updateState
+b updateStateNoOp
 l8_LF_cMapLoad:
 dup
 txn ApplicationID
 app_opted_in
-bnz l98_mapLoadDo
-l99_mapLoadDef:
+bnz l97_mapLoadDo
+l98_mapLoadDef:
 pop
 int 25
 bzero
 retsub
-l98_mapLoadDo:
+l97_mapLoadDo:
 byte base64(AA==)
 app_local_get
 retsub
-l88_LF_checkTxn_net:
+l87_LF_checkTxn_net:
 // resource: R_Txn
 load 0 // GV_txnCounter :: UInt
 dup
@@ -2780,7 +2772,7 @@ gtxns Amount
 ==
 assert
 retsub
-l66_LF_checkTxn_tok:
+l65_LF_checkTxn_tok:
 // resource: R_Txn
 load 0 // GV_txnCounter :: UInt
 dup
