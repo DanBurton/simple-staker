@@ -5,15 +5,18 @@ const StakeUpdate = Struct([
   ["newEveryoneStaked", UInt],
 ]);
 
+const Rewards = Tuple(UInt, UInt);
+const zeroRewards = [0, 0];
+
 const RewardsUpdate = Struct([
-  ["userReceived", UInt],
-  ["totalRemaining", UInt],
+  ["userReceived", Rewards],
+  ["totalRemaining", Rewards],
 ]);
 
 const Opts = Struct([
-  ["rewardToken", Token],
+  ["rewardToken1", Token],
   ["stakeToken", Token],
-  ["rewardsPerBlock", UInt],
+  ["rewardsPerBlock", Rewards],
   ["duration", UInt],
 ]);
 
@@ -22,6 +25,14 @@ const zsub = (x, y) => {
   if (y >= x) { return 0; }
   else { return x - y; }
 }
+const sumf = (m, f) => m.reduce(0, (acc, e) => acc + f(e));
+const muldiv0 = (x, y, z) => {
+  if ( z == 0 ) {
+    return x;
+  } else {
+    return muldiv(x, y, z);
+  }
+};
 
 export const main = Reach.App(() => {
   setOptions({
@@ -47,25 +58,28 @@ export const main = Reach.App(() => {
   const V = View({
     opts: Opts,
     totalStaked: UInt,
-    remainingRewards: UInt,
+    remainingRewards: Rewards,
     end: UInt,
     staked: Fun([Address], UInt),
-    rewardsAvailableAt: Fun([Address, UInt /* round */], UInt),
+    rewardsAvailableAt: Fun([Address, UInt /* round */], Rewards),
   });
   init();
 
   Deployer.only(() => {
     const opts = declassify(interact.opts);
-    const {rewardToken, stakeToken} = opts;
-    assume(rewardToken != stakeToken);
+    const {rewardToken1, stakeToken} = opts;
+    assume(rewardToken1 != stakeToken);
   });
-  Deployer.publish(opts, rewardToken, stakeToken);
+  Deployer.publish(opts, rewardToken1, stakeToken);
   V.opts.set(opts);
-  const {rewardsPerBlock, duration}  = opts;
+  const {rewardsPerBlock, duration} = opts;
   commit();
 
-  const startRewards = rewardsPerBlock * duration;
-  Deployer.pay([[startRewards, rewardToken]]);
+  const startRewards = [
+    rewardsPerBlock[0] * duration,
+    rewardsPerBlock[1] * duration,
+  ];
+  Deployer.pay([startRewards[0], [startRewards[1], rewardToken1]]);
   // lct+2 is the soonest someone could stake, so it should start then.
   // lct = the previous publish
   // +1 (or more) = this payment
@@ -74,67 +88,81 @@ export const main = Reach.App(() => {
   const end = start + duration;
   V.end.set(end);
 
-  // TODO: bundle these in the same map to make it possible to do more assertions in the loop invariant
-  const Stakes = new Map(UInt);      // amt staked by addr
-  const RewardsPaid = new Map(UInt); // amt rewards already "paid" to addr
+  const UserData = Object({
+    stake: UInt,
+    rewards: Rewards,
+  });
+  const Users = new Map(UserData);
   // Staking "late" is treated as though "you already got" rewards up until the moment you staked
 
-  const lookupStaked = (addr) => fromSome(Stakes[addr], 0);
-  const lookupRewardsPaid = (addr) => fromSome(RewardsPaid[addr], 0);
+  const lookupUserData = (addr) => fromSome(Users[addr], {
+    stake: 0,
+    rewards: zeroRewards,
+  });
+  const userUpdate = (addr, f) => {
+    Users[addr] = f(lookupUserData(addr));
+  };
+
+  const lookupStaked = (addr) => lookupUserData(addr).stake;
+  const lookupRewardsPaid = (addr) => lookupUserData(addr).rewards;
   V.staked.set(lookupStaked);
 
-  assert(startRewards == duration * rewardsPerBlock, "enough rewards");
+  const checkStartRewards = (i) => {
+    const sr = startRewards[i];
+    const rpb = rewardsPerBlock[i];
+    assert(sr == duration * rpb, "enough rewards");
+  };
+  checkStartRewards(0);
+  checkStartRewards(1);
 
   Deployer.interact.readyForStakers();
   const  [totalStaked, remainingRewards, rewardsLastRefreshed, lastAvailableRewards] =
-    parallelReduce([0,     startRewards,                start,                    0])
+    parallelReduce([0,     startRewards,                start,          zeroRewards])
     .define(() => {
+      const userStakes = () => sumf(Users, (x) => x.stake);
       const lct = lastConsensusTime();
-      const totAvailableRewardsAt = (when) => {
-        // You might think it's this, but it's not:
-        // return rewardsPerBlock * min(duration, when - start);
-        // It's this:
-
-        // JAY: The error is that after a call to Staker.withdraw, we
-        // re-evaluate this. (NOTE: We should add that to the stack trace
-        // somehow.) And, time has advanced, meaning there's another block worth
-        // of reward added. BUT, we don't ensure that the remaining reward
-        // includes that block.
-
-        // DAN: doing the hacky easy thing for now.
+      const totAvailableRewardsAt_i = (when) => (i) => {
         const amt = min(
-          lastAvailableRewards + (zsub(min(end, when), rewardsLastRefreshed) * rewardsPerBlock),
-          remainingRewards
+          lastAvailableRewards[i] + (zsub(min(end, when), rewardsLastRefreshed) * rewardsPerBlock[i]),
+          remainingRewards[i]
         );
-        assert(amt <= remainingRewards, "reward less than remaining");
+        assert(amt <= remainingRewards[i], "reward less than remaining");
         return amt;
       }
+      const totAvailableRewardsAt = (when) => [
+        totAvailableRewardsAt_i(when)(0),
+        totAvailableRewardsAt_i(when)(1),
+      ];
       const availableRewards = totAvailableRewardsAt(lct)
-      const lookupRewardsAt = (addr, when) => {
+      const lookupRewardsAt_i = (addr, when) => (i) => {
         const youStaked = lookupStaked(addr);
-        const youAlreadyGot = lookupRewardsPaid(addr);
+        const youAlreadyGot = lookupRewardsPaid(addr)[i];
         assert(youStaked <= totalStaked);
-        // DAN: doing the hacky thing
         const amt = min(
-          zsub(muldiv(totAvailableRewardsAt(when), youStaked, totalStaked), youAlreadyGot),
-          availableRewards
+          zsub(muldiv0(totAvailableRewardsAt_i(when)(i), youStaked, totalStaked), youAlreadyGot),
+          availableRewards[i]
         );
-        assert(amt <= availableRewards);
+        assert(amt <= availableRewards[i]);
         return amt;
       };
+      const lookupRewardsAt = (addr, when) => [
+        lookupRewardsAt_i(addr, when)(0),
+        lookupRewardsAt_i(addr, when)(1),
+      ];
       const lookupRewards = (addr) => lookupRewardsAt(addr, lct);
       V.totalStaked.set(totalStaked);
       V.remainingRewards.set(remainingRewards);
       V.rewardsAvailableAt.set(lookupRewardsAt);
     })
-    .invariant(     balance() == 0
-      &&  balance(stakeToken) == totalStaked
-      &&         Stakes.sum() == totalStaked
-      && balance(rewardToken) == remainingRewards
-      &&         startRewards >= remainingRewards
-      // TODO:
-      // && totAvailableRewardsAt(end) <= remainingRewards
-      // Not sure about rounding errors
+    .invariant(               true
+      &&   balance(stakeToken) == totalStaked
+      &&          userStakes() == totalStaked
+      && totAvailableRewardsAt_i(end)(0) <= remainingRewards[0]
+      &&             balance() == remainingRewards[0]
+      &&       startRewards[0] >= remainingRewards[0]
+      && balance(rewardToken1) == remainingRewards[1]
+      &&       startRewards[1] >= remainingRewards[1]
+      && totAvailableRewardsAt_i(end)(1) <= remainingRewards[1]
       )
     .paySpec([stakeToken])
     .while(totalStaked != 0 || lct <= end)
@@ -143,10 +171,19 @@ export const main = Reach.App(() => {
       ((amt, k) => {
         const newEveryoneStaked = totalStaked + amt;
         const newUserStaked = lookupStaked(this) + amt;
-        Stakes[this] = newUserStaked;
         const currentPaid = lookupRewardsPaid(this);
-        const morePaid = availableRewards * amt / newEveryoneStaked;
-        RewardsPaid[this] = currentPaid + morePaid;
+        const mkNewPaid = (i) => {
+          const a = availableRewards[i];
+          const morePaid = muldiv0(a, amt, newEveryoneStaked);
+          return currentPaid[i] + morePaid;
+        };
+        Users[this] = {
+          stake: newUserStaked,
+          rewards: [
+            mkNewPaid(0),
+            mkNewPaid(1),
+          ],
+        };
         k(StakeUpdate.fromObject({newUserStaked, newEveryoneStaked}));
         return [newEveryoneStaked, remainingRewards, lct, availableRewards];
       }))
@@ -160,21 +197,19 @@ export const main = Reach.App(() => {
         transfer([[amt, stakeToken]]).to(this);
         const newEveryoneStaked = totalStaked - amt;
         const newUserStaked = oldUserStaked - amt;
-        Stakes[this] = newUserStaked;
         const currentPaid = lookupRewardsPaid(this);
-        const lessPaid = (() => {
-          // let's not div by 0
-          if (newEveryoneStaked == 0) {
-            // You're the last one out, you have access to take all of the available rewards.
-            return availableRewards;
-          } else {
-            return availableRewards * amt / newEveryoneStaked;
-          }
-        })();
-        // TODO: assert things about currentPaid/lessPaid
+        const lessPaid = (i) => muldiv0(availableRewards[i], amt, newEveryoneStaked);
+        // XXX: assert things about currentPaid/lessPaid
         // If lessPaid < currentPaid, this means the user may be losing out on rewards somehow.
         // This is not great, but we are not going to try to always prevent it from happening.
-        RewardsPaid[this] = zsub(currentPaid, lessPaid);
+        const mkNewPaid = (i) => zsub(currentPaid[i], lessPaid(i));
+        Users[this] = {
+          stake: newUserStaked,
+          rewards: [
+            mkNewPaid(0),
+            mkNewPaid(1),
+          ],
+        };
         assert(newUserStaked <= newEveryoneStaked);
         k(StakeUpdate.fromObject({newUserStaked, newEveryoneStaked}));
         return [newEveryoneStaked, remainingRewards, lct, availableRewards];
@@ -182,23 +217,44 @@ export const main = Reach.App(() => {
     .api(Staker.harvest,
       (() => [0, [0, stakeToken]]),
       ((k) => {
-        const amt = lookupRewards(this);
-        assert(amt <= remainingRewards);
-        transfer([[amt, rewardToken]]).to(this);
-        const totalRemaining = remainingRewards - amt;
-        RewardsPaid[this] = lookupRewardsPaid(this) + amt;
-        k(RewardsUpdate.fromObject({userReceived: amt, totalRemaining}));
-        return [totalStaked, totalRemaining, lct, availableRewards - amt];
+        const amts = lookupRewards(this);
+        assert(amts[0] <= remainingRewards[0]);
+        assert(amts[1] <= remainingRewards[1]);
+        transfer([amts[0], [amts[1], rewardToken1]]).to(this);
+        const mkTotalRemaining = (i) => (remainingRewards[i] - amts[i]);
+        const totalRemaining = [
+          mkTotalRemaining(0),
+          mkTotalRemaining(1),
+        ];
+        const paid = lookupRewardsPaid(this);
+        const mkNewPaid = (i) => paid[i] + amts[i];
+        userUpdate(this, (old) => ({
+          ...old,
+          rewards: [
+            mkNewPaid(0),
+            mkNewPaid(1),
+          ],
+        }));
+        k(RewardsUpdate.fromObject({userReceived: amts, totalRemaining}));
+        const mkAvailableRewards_p = (i) => availableRewards[i] - amts[i];
+        const availableRewards_p = [
+          mkAvailableRewards_p(0),
+          mkAvailableRewards_p(1),
+        ];
+        return [totalStaked, totalRemaining, lct, availableRewards_p];
       }))
   commit();
+
   fork()
     .case(Deployer, () => ({}), () => 0, () => {})
     .api(Any.halt, (k) => { k(null); });
+
   // May be non-zero based on staker behavior
-  transfer([[balance(rewardToken), rewardToken]]).to(Deployer);
+  transfer(balance()).to(Deployer);
+  transfer([[balance(rewardToken1), rewardToken1]]).to(Deployer);
   // These two should be 0, but just in case.
   transfer([[balance(stakeToken), stakeToken]]).to(Deployer);
-  transfer(balance()).to(Deployer);
+
   commit();
   exit();
 });
